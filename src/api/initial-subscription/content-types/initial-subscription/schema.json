@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "initial_subscriptions",
+  "info": {
+    "singularName": "initial-subscription",
+    "pluralName": "initial-subscriptions",
+    "displayName": "initial subscription"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "admin::user"
+    },
+    "subscription_id": {
+      "type": "string"
+    },
+    "payment_status": {
+      "type": "enumeration",
+      "enum": [
+        "paid",
+        "unpaid"
+      ]
+    }
+  }
+}
