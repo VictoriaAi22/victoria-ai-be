@@ -69,7 +69,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "files", "videos", "audios"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "first_name": {
       "type": "string",
@@ -78,6 +80,20 @@
     "last_name": {
       "type": "string",
       "required": true
+    },
+    "stripeCustomerId": {
+      "type": "string",
+      "unique": true
+    },
+    "stripeSubscriptionId": {
+      "type": "string",
+      "unique": true
+    },
+    "stripePricingId": {
+      "type": "string"
+    },
+    "stripeCurrentPeriodEnd": {
+      "type": "string"
     }
   }
 }

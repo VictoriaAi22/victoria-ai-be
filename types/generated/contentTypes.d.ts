@@ -698,6 +698,10 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     profile_picture: Attribute.Media;
     first_name: Attribute.String & Attribute.Required;
     last_name: Attribute.String & Attribute.Required;
+    stripeCustomerId: Attribute.String & Attribute.Unique;
+    StripeSubscriptionId: Attribute.String & Attribute.Unique;
+    stripePricingId: Attribute.String;
+    stripeCurrentPeriodEnd: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
