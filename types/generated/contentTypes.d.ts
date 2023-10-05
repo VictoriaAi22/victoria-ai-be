@@ -403,7 +403,7 @@ export interface ApiPlanPlan extends Schema.SingleType {
   info: {
     singularName: 'plan';
     pluralName: 'plans';
-    displayName: 'PLAN';
+    displayName: 'plan';
   };
   options: {
     draftAndPublish: true;
