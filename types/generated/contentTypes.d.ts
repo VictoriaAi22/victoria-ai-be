@@ -398,6 +398,30 @@ export interface ApiInitialSubscriptionInitialSubscription
   };
 }
 
+export interface ApiPlanPlan extends Schema.SingleType {
+  collectionName: 'plans';
+  info: {
+    singularName: 'plan';
+    pluralName: 'plans';
+    displayName: 'PLAN';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    plan_id: Attribute.String & Attribute.Required & Attribute.Unique;
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    price: Attribute.Float;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -699,7 +723,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     first_name: Attribute.String & Attribute.Required;
     last_name: Attribute.String & Attribute.Required;
     stripeCustomerId: Attribute.String & Attribute.Unique;
-    StripeSubscriptionId: Attribute.String & Attribute.Unique;
+    stripeSubscriptionId: Attribute.String & Attribute.Unique;
     stripePricingId: Attribute.String;
     stripeCurrentPeriodEnd: Attribute.String;
     createdAt: Attribute.DateTime;
@@ -872,6 +896,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::initial-subscription.initial-subscription': ApiInitialSubscriptionInitialSubscription;
+      'api::plan.plan': ApiPlanPlan;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
