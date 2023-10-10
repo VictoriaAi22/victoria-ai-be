@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_landing_page_layout_buttons",
+  "info": {
+    "displayName": "Button"
+  },
+  "options": {},
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true
+    },
+    "Link": {
+      "type": "string",
+      "required": true
+    },
+    "Variant": {
+      "type": "enumeration",
+      "enum": [
+        "Fillled",
+        "Outline"
+      ]
+    },
+    "Icon": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

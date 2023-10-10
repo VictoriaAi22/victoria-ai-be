@@ -361,6 +361,36 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiLandingPageLandingPage extends Schema.SingleType {
+  collectionName: 'landing_pages';
+  info: {
+    singularName: 'landing-page';
+    pluralName: 'landing-pages';
+    displayName: 'Landing Page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    HeroSection: Attribute.Component<'landing-page-layout.hero-section', true>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::landing-page.landing-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::landing-page.landing-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -682,148 +712,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface PluginStrapiStripeSsProduct extends Schema.CollectionType {
-  collectionName: 'strapi-stripe_ss-product';
-  info: {
-    tableName: 'StripeProduct';
-    singularName: 'ss-product';
-    pluralName: 'ss-products';
-    displayName: 'Product';
-    description: 'Stripe Products';
-    kind: 'collectionType';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    title: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMax<{
-        min: 1;
-      }>;
-    slug: Attribute.UID<'plugin::strapi-stripe.ss-product', 'title'> &
-      Attribute.Required &
-      Attribute.Unique;
-    description: Attribute.Text &
-      Attribute.Required &
-      Attribute.SetMinMax<{
-        min: 1;
-      }>;
-    price: Attribute.Decimal & Attribute.Required;
-    currency: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMax<{
-        min: 1;
-      }>;
-    productImage: Attribute.Media & Attribute.Required;
-    isSubscription: Attribute.Boolean & Attribute.DefaultTo<false>;
-    interval: Attribute.String;
-    trialPeriodDays: Attribute.Integer;
-    stripeProductId: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMax<{
-        min: 3;
-      }>;
-    stripePriceId: Attribute.String &
-      Attribute.SetMinMax<{
-        min: 3;
-      }>;
-    stripePlanId: Attribute.String &
-      Attribute.SetMinMax<{
-        min: 3;
-      }>;
-    stripePayment: Attribute.Relation<
-      'plugin::strapi-stripe.ss-product',
-      'oneToMany',
-      'plugin::strapi-stripe.ss-payment'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'plugin::strapi-stripe.ss-product',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'plugin::strapi-stripe.ss-product',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface PluginStrapiStripeSsPayment extends Schema.CollectionType {
-  collectionName: 'strapi-stripe_ss-payment';
-  info: {
-    tableName: 'StripePayment';
-    singularName: 'ss-payment';
-    pluralName: 'ss-payments';
-    displayName: 'Payment';
-    description: 'Stripe Payment';
-    kind: 'collectionType';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
-  attributes: {
-    txnDate: Attribute.DateTime & Attribute.Required;
-    transactionId: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 250;
-      }>;
-    isTxnSuccessful: Attribute.Boolean & Attribute.DefaultTo<false>;
-    txnMessage: Attribute.Text &
-      Attribute.SetMinMaxLength<{
-        maxLength: 5000;
-      }>;
-    txnErrorMessage: Attribute.String &
-      Attribute.SetMinMaxLength<{
-        maxLength: 250;
-      }>;
-    txnAmount: Attribute.Decimal & Attribute.Required;
-    customerName: Attribute.String & Attribute.Required;
-    customerEmail: Attribute.String & Attribute.Required;
-    stripeProduct: Attribute.Relation<
-      'plugin::strapi-stripe.ss-payment',
-      'manyToOne',
-      'plugin::strapi-stripe.ss-product'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'plugin::strapi-stripe.ss-payment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'plugin::strapi-stripe.ss-payment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 declare module '@strapi/strapi' {
   export module Shared {
     export interface ContentTypes {
@@ -834,14 +722,13 @@ declare module '@strapi/strapi' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::landing-page.landing-page': ApiLandingPageLandingPage;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'plugin::strapi-stripe.ss-product': PluginStrapiStripeSsProduct;
-      'plugin::strapi-stripe.ss-payment': PluginStrapiStripeSsPayment;
     }
   }
 }

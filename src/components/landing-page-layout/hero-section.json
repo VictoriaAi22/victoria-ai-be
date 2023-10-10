@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_landing_page_layout_hero_sections",
+  "info": {
+    "displayName": "Hero Section",
+    "icon": "check",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "HeroTitle": {
+      "type": "string",
+      "required": true
+    },
+    "HeroParagraph": {
+      "type": "string",
+      "required": true
+    },
+    "HeroSmallImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "ActionButton": {
+      "type": "component",
+      "repeatable": true,
+      "component": "landing-page-layout.button"
+    },
+    "HeroImage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}
