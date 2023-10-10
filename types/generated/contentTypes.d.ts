@@ -398,30 +398,6 @@ export interface ApiInitialSubscriptionInitialSubscription
   };
 }
 
-export interface ApiPlanPlan extends Schema.SingleType {
-  collectionName: 'plans';
-  info: {
-    singularName: 'plan';
-    pluralName: 'plans';
-    displayName: 'plan';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    plan_id: Attribute.String & Attribute.Required & Attribute.Unique;
-    name: Attribute.String & Attribute.Required & Attribute.Unique;
-    price: Attribute.Float;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -896,7 +872,6 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::initial-subscription.initial-subscription': ApiInitialSubscriptionInitialSubscription;
-      'api::plan.plan': ApiPlanPlan;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
