@@ -12,7 +12,7 @@
       "required": true
     },
     "HeroParagraph": {
-      "type": "string",
+      "type": "text",
       "required": true
     },
     "HeroSmallImage": {
@@ -29,11 +29,12 @@
       "component": "landing-page-layout.button"
     },
     "HeroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     }
   }
 }

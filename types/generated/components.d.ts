@@ -22,7 +22,7 @@ export interface LandingPageLayoutHeroSection extends Schema.Component {
   };
   attributes: {
     HeroTitle: Attribute.String & Attribute.Required;
-    HeroParagraph: Attribute.String & Attribute.Required;
+    HeroParagraph: Attribute.Text & Attribute.Required;
     HeroSmallImage: Attribute.Media;
     ActionButton: Attribute.Component<'landing-page-layout.button', true>;
     HeroImage: Attribute.Media;

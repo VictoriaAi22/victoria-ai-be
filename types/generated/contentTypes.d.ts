@@ -367,6 +367,7 @@ export interface ApiLandingPageLandingPage extends Schema.SingleType {
     singularName: 'landing-page';
     pluralName: 'landing-pages';
     displayName: 'Landing Page';
+    description: '';
   };
   options: {
     draftAndPublish: true;
