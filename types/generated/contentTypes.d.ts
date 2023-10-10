@@ -361,43 +361,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiInitialSubscriptionInitialSubscription
-  extends Schema.CollectionType {
-  collectionName: 'initial_subscriptions';
-  info: {
-    singularName: 'initial-subscription';
-    pluralName: 'initial-subscriptions';
-    displayName: 'initial subscription';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    user: Attribute.Relation<
-      'api::initial-subscription.initial-subscription',
-      'oneToOne',
-      'admin::user'
-    >;
-    subscription_id: Attribute.String;
-    payment_status: Attribute.Enumeration<['paid', 'unpaid']>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::initial-subscription.initial-subscription',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::initial-subscription.initial-subscription',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -871,7 +834,6 @@ declare module '@strapi/strapi' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::initial-subscription.initial-subscription': ApiInitialSubscriptionInitialSubscription;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
