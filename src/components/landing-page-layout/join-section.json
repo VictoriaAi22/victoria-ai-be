@@ -2,11 +2,12 @@
   "collectionName": "components_landing_page_layout_join_sections",
   "info": {
     "displayName": "Join Section",
-    "icon": "check"
+    "icon": "check",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "heading2": {
+    "heading3": {
       "type": "string",
       "required": true
     },
@@ -16,21 +17,22 @@
       "repeatable": true,
       "component": "landing-page-layout.companies-logo"
     },
-    "heading3": {
+    "heading4": {
       "type": "string"
     },
-    "heading1": {
+    "heading2": {
       "type": "string"
     },
     "paragraph": {
       "type": "text"
     },
     "sectionImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     }
   }
 }
