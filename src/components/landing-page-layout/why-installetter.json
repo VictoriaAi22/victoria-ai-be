@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_landing_page_layout_why_installetters",
+  "info": {
+    "displayName": "Why Installetter",
+    "icon": "check"
+  },
+  "options": {},
+  "attributes": {
+    "heading3": {
+      "type": "string",
+      "required": true
+    },
+    "heading2": {
+      "type": "string"
+    },
+    "paragraph": {
+      "type": "text"
+    },
+    "sectionImage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "point": {
+      "displayName": "points",
+      "type": "component",
+      "repeatable": true,
+      "component": "landing-page-layout.points"
+    }
+  }
+}

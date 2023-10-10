@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_landing_page_layout_join_sections",
+  "info": {
+    "displayName": "Join Section",
+    "icon": "check"
+  },
+  "options": {},
+  "attributes": {
+    "heading2": {
+      "type": "string",
+      "required": true
+    },
+    "companyLogos": {
+      "displayName": "Companies logo",
+      "type": "component",
+      "repeatable": true,
+      "component": "landing-page-layout.companies-logo"
+    },
+    "heading3": {
+      "type": "string"
+    },
+    "heading1": {
+      "type": "string"
+    },
+    "paragraph": {
+      "type": "text"
+    },
+    "sectionImage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

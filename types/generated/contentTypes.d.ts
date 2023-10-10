@@ -374,6 +374,7 @@ export interface ApiLandingPageLandingPage extends Schema.SingleType {
   };
   attributes: {
     HeroSection: Attribute.Component<'landing-page-layout.hero-section', true>;
+    JoinSection: Attribute.Component<'landing-page-layout.join-section'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
