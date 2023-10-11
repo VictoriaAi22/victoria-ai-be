@@ -21,6 +21,11 @@
       "type": "component",
       "repeatable": false,
       "component": "landing-page-layout.join-section"
+    },
+    "whyInstaller": {
+      "type": "component",
+      "repeatable": true,
+      "component": "landing-page-layout.why-us"
     }
   }
 }

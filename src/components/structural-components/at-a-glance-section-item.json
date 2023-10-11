@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_structural_components_at_a_glance_section_items",
+  "info": {
+    "displayName": "At a glance section item"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "paragraph": {
+      "type": "text"
+    },
+    "Image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

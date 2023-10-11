@@ -1,16 +1,14 @@
 {
-  "collectionName": "components_landing_page_layout_why_installetters",
+  "collectionName": "components_landing_page_layout_why_uses",
   "info": {
-    "displayName": "Why Installetter",
-    "icon": "check"
+    "displayName": "Why Us"
   },
   "options": {},
   "attributes": {
-    "heading3": {
-      "type": "string",
-      "required": true
+    "heading": {
+      "type": "string"
     },
-    "heading2": {
+    "subheading": {
       "type": "string"
     },
     "paragraph": {
@@ -23,11 +21,10 @@
       "type": "media",
       "multiple": false
     },
-    "point": {
-      "displayName": "points",
+    "listPoints": {
       "type": "component",
       "repeatable": true,
-      "component": "landing-page-layout.points"
+      "component": "structural-components.points"
     }
   }
 }

@@ -7,7 +7,7 @@
   },
   "options": {},
   "attributes": {
-    "heading3": {
+    "firstHeading": {
       "type": "string",
       "required": true
     },
@@ -15,16 +15,7 @@
       "displayName": "Companies logo",
       "type": "component",
       "repeatable": true,
-      "component": "landing-page-layout.companies-logo"
-    },
-    "heading4": {
-      "type": "string"
-    },
-    "heading2": {
-      "type": "string"
-    },
-    "paragraph": {
-      "type": "text"
+      "component": "structural-components.companies-logo"
     },
     "sectionImage": {
       "type": "media",
@@ -33,6 +24,15 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "MainHeading": {
+      "type": "string"
+    },
+    "secondHeading": {
+      "type": "string"
+    },
+    "paragraph": {
+      "type": "text"
     }
   }
 }

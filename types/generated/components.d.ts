@@ -1,25 +1,17 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
-export interface LandingPageLayoutButton extends Schema.Component {
-  collectionName: 'components_landing_page_layout_buttons';
+export interface LandingPageLayoutAtAGlanceSection extends Schema.Component {
+  collectionName: 'components_landing_page_layout_at_a_glance_sections';
   info: {
-    displayName: 'Button';
+    displayName: 'At a glance section';
   };
   attributes: {
-    Title: Attribute.String & Attribute.Required;
-    Link: Attribute.String & Attribute.Required;
-    Variant: Attribute.Enumeration<['Fillled', 'Outline']>;
-    Icon: Attribute.Media;
-  };
-}
-
-export interface LandingPageLayoutCompaniesLogo extends Schema.Component {
-  collectionName: 'components_landing_page_layout_companies_logos';
-  info: {
-    displayName: 'Companies logo';
-  };
-  attributes: {
-    logo: Attribute.Media;
+    subheading: Attribute.String;
+    sectionHeading: Attribute.String;
+    sectionItem: Attribute.Component<
+      'structural-components.at-a-glance-section-item',
+      true
+    >;
   };
 }
 
@@ -34,7 +26,7 @@ export interface LandingPageLayoutHeroSection extends Schema.Component {
     HeroTitle: Attribute.String & Attribute.Required;
     HeroParagraph: Attribute.Text & Attribute.Required;
     HeroSmallImage: Attribute.Media;
-    ActionButton: Attribute.Component<'landing-page-layout.button', true>;
+    ActionButton: Attribute.Component<'shared-components.button', true>;
     HeroImage: Attribute.Media;
   };
 }
@@ -44,55 +36,99 @@ export interface LandingPageLayoutJoinSection extends Schema.Component {
   info: {
     displayName: 'Join Section';
     icon: 'check';
+    description: '';
   };
   attributes: {
-    heading2: Attribute.String & Attribute.Required;
+    firstHeading: Attribute.String & Attribute.Required;
     companyLogos: Attribute.Component<
-      'landing-page-layout.companies-logo',
+      'structural-components.companies-logo',
       true
     >;
-    heading3: Attribute.String;
-    heading1: Attribute.String;
-    paragraph: Attribute.Text;
     sectionImage: Attribute.Media;
+    MainHeading: Attribute.String;
+    secondHeading: Attribute.String;
+    paragraph: Attribute.Text;
   };
 }
 
-export interface LandingPageLayoutPoints extends Schema.Component {
+export interface LandingPageLayoutWhyUs extends Schema.Component {
+  collectionName: 'components_landing_page_layout_why_uses';
+  info: {
+    displayName: 'Why Us';
+  };
+  attributes: {
+    heading: Attribute.String;
+    subheading: Attribute.String;
+    paragraph: Attribute.Text;
+    sectionImage: Attribute.Media;
+    listPoints: Attribute.Component<'structural-components.points', true>;
+  };
+}
+
+export interface SharedComponentsButton extends Schema.Component {
+  collectionName: 'components_landing_page_layout_buttons';
+  info: {
+    displayName: 'Button';
+    description: '';
+  };
+  attributes: {
+    Title: Attribute.String & Attribute.Required;
+    Link: Attribute.String & Attribute.Required;
+    Variant: Attribute.Enumeration<['Filled', 'Outline']>;
+    Icon: Attribute.Media;
+    buttonColor: Attribute.String &
+      Attribute.CustomField<'plugin::color-picker.color'>;
+  };
+}
+
+export interface StructuralComponentsAtAGlanceSectionItem
+  extends Schema.Component {
+  collectionName: 'components_structural_components_at_a_glance_section_items';
+  info: {
+    displayName: 'At a glance section item';
+  };
+  attributes: {
+    title: Attribute.String;
+    paragraph: Attribute.Text;
+    Image: Attribute.Media;
+  };
+}
+
+export interface StructuralComponentsCompaniesLogo extends Schema.Component {
+  collectionName: 'components_landing_page_layout_companies_logos';
+  info: {
+    displayName: 'Companies logo';
+    description: '';
+  };
+  attributes: {
+    logo: Attribute.Media;
+  };
+}
+
+export interface StructuralComponentsPoints extends Schema.Component {
   collectionName: 'components_landing_page_layout_points';
   info: {
     displayName: 'points';
+    description: '';
   };
   attributes: {
     heading: Attribute.String;
     paragraph: Attribute.Text;
-  };
-}
-
-export interface LandingPageLayoutWhyInstalletter extends Schema.Component {
-  collectionName: 'components_landing_page_layout_why_installetters';
-  info: {
-    displayName: 'Why Installetter';
-    icon: 'check';
-  };
-  attributes: {
-    heading3: Attribute.String & Attribute.Required;
-    heading2: Attribute.String;
-    paragraph: Attribute.Text;
-    sectionImage: Attribute.Media;
-    point: Attribute.Component<'landing-page-layout.points', true>;
+    readMoreLink: Attribute.String;
   };
 }
 
 declare module '@strapi/strapi' {
   export module Shared {
     export interface Components {
-      'landing-page-layout.button': LandingPageLayoutButton;
-      'landing-page-layout.companies-logo': LandingPageLayoutCompaniesLogo;
+      'landing-page-layout.at-a-glance-section': LandingPageLayoutAtAGlanceSection;
       'landing-page-layout.hero-section': LandingPageLayoutHeroSection;
       'landing-page-layout.join-section': LandingPageLayoutJoinSection;
-      'landing-page-layout.points': LandingPageLayoutPoints;
-      'landing-page-layout.why-installetter': LandingPageLayoutWhyInstalletter;
+      'landing-page-layout.why-us': LandingPageLayoutWhyUs;
+      'shared-components.button': SharedComponentsButton;
+      'structural-components.at-a-glance-section-item': StructuralComponentsAtAGlanceSectionItem;
+      'structural-components.companies-logo': StructuralComponentsCompaniesLogo;
+      'structural-components.points': StructuralComponentsPoints;
     }
   }
 }

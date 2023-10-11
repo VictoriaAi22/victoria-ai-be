@@ -1,16 +1,18 @@
 {
   "collectionName": "components_landing_page_layout_companies_logos",
   "info": {
-    "displayName": "Companies logo"
+    "displayName": "Companies logo",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     }
   }
 }
