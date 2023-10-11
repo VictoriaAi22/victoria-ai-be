@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_landing_page_layout_footer_sections",
+  "info": {
+    "displayName": "Footer Section",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "paragraph": {
+      "type": "text"
+    },
+    "section": {
+      "displayName": "Sections",
+      "type": "component",
+      "repeatable": true,
+      "component": "footer-components.sections"
+    }
+  }
+}

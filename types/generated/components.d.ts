@@ -1,5 +1,28 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
+export interface FooterComponentsFooterLink extends Schema.Component {
+  collectionName: 'components_footer_components_footer_links';
+  info: {
+    displayName: 'Footer Link';
+  };
+  attributes: {
+    title: Attribute.String;
+    href: Attribute.String;
+  };
+}
+
+export interface FooterComponentsSections extends Schema.Component {
+  collectionName: 'components_footer_components_sections';
+  info: {
+    displayName: 'Sections';
+    description: '';
+  };
+  attributes: {
+    title: Attribute.String;
+    links: Attribute.Component<'footer-components.footer-link', true>;
+  };
+}
+
 export interface LandingPageLayoutAtAGlanceSection extends Schema.Component {
   collectionName: 'components_landing_page_layout_at_a_glance_sections';
   info: {
@@ -44,6 +67,18 @@ export interface LandingPageLayoutFaqSection extends Schema.Component {
     subheading: Attribute.String;
     paragraph: Attribute.Text;
     faq: Attribute.Component<'structural-components.faqs', true>;
+  };
+}
+
+export interface LandingPageLayoutFooterSection extends Schema.Component {
+  collectionName: 'components_landing_page_layout_footer_sections';
+  info: {
+    displayName: 'Footer Section';
+    description: '';
+  };
+  attributes: {
+    paragraph: Attribute.Text;
+    section: Attribute.Component<'footer-components.sections', true>;
   };
 }
 
@@ -222,9 +257,12 @@ export interface StructuralComponentsTestimonial extends Schema.Component {
 declare module '@strapi/strapi' {
   export module Shared {
     export interface Components {
+      'footer-components.footer-link': FooterComponentsFooterLink;
+      'footer-components.sections': FooterComponentsSections;
       'landing-page-layout.at-a-glance-section': LandingPageLayoutAtAGlanceSection;
       'landing-page-layout.customer-stories': LandingPageLayoutCustomerStories;
       'landing-page-layout.faq-section': LandingPageLayoutFaqSection;
+      'landing-page-layout.footer-section': LandingPageLayoutFooterSection;
       'landing-page-layout.hero-section': LandingPageLayoutHeroSection;
       'landing-page-layout.join-section': LandingPageLayoutJoinSection;
       'landing-page-layout.newsletter-section': LandingPageLayoutNewsletterSection;

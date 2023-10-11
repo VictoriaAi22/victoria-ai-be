@@ -384,6 +384,7 @@ export interface ApiLandingPageLandingPage extends Schema.SingleType {
     testimonialSection: Attribute.Component<'landing-page-layout.testimonial-section'>;
     faqSection: Attribute.Component<'landing-page-layout.faq-section'>;
     newsletterSection: Attribute.Component<'landing-page-layout.newsletter-section'>;
+    footerSection: Attribute.Component<'landing-page-layout.footer-section'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

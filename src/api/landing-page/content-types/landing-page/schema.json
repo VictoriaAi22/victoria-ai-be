@@ -55,6 +55,12 @@
       "type": "component",
       "repeatable": false,
       "component": "landing-page-layout.newsletter-section"
+    },
+    "footerSection": {
+      "displayName": "Footer Section",
+      "type": "component",
+      "repeatable": false,
+      "component": "landing-page-layout.footer-section"
     }
   }
 }
