@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_landing_page_layout_newsletter_sections",
+  "info": {
+    "displayName": "Newsletter Section",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "paragraph": {
+      "type": "text"
+    },
+    "privacyParagraph": {
+      "type": "string"
+    },
+    "sectionImage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

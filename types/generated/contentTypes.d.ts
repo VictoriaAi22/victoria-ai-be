@@ -375,7 +375,15 @@ export interface ApiLandingPageLandingPage extends Schema.SingleType {
   attributes: {
     HeroSection: Attribute.Component<'landing-page-layout.hero-section', true>;
     JoinSection: Attribute.Component<'landing-page-layout.join-section'>;
-    whyInstaller: Attribute.Component<'landing-page-layout.why-us', true>;
+    whyInstaletterSection: Attribute.Component<
+      'landing-page-layout.why-us',
+      true
+    >;
+    atAGlanceSection: Attribute.Component<'landing-page-layout.at-a-glance-section'>;
+    CustomerStoriesSection: Attribute.Component<'landing-page-layout.customer-stories'>;
+    testimonialSection: Attribute.Component<'landing-page-layout.testimonial-section'>;
+    faqSection: Attribute.Component<'landing-page-layout.faq-section'>;
+    newsletterSection: Attribute.Component<'landing-page-layout.newsletter-section'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

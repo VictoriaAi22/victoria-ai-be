@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_structural_components_accomplishments",
+  "info": {
+    "displayName": "accomplishment"
+  },
+  "options": {},
+  "attributes": {
+    "number": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    }
+  }
+}

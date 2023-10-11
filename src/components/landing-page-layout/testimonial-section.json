@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_landing_page_layout_testimonial_sections",
+  "info": {
+    "displayName": "Testimonial Section"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "paragraph": {
+      "type": "text"
+    },
+    "sectionImage": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "testimonials": {
+      "displayName": "testimonial",
+      "type": "component",
+      "repeatable": true,
+      "component": "structural-components.testimonial"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_landing_page_layout_faq_sections",
+  "info": {
+    "displayName": "Faq Section"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "type": "string"
+    },
+    "subheading": {
+      "type": "string"
+    },
+    "paragraph": {
+      "type": "text"
+    },
+    "faq": {
+      "displayName": "faqs",
+      "type": "component",
+      "repeatable": true,
+      "component": "structural-components.faqs"
+    }
+  }
+}

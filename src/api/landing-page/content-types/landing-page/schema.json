@@ -22,10 +22,39 @@
       "repeatable": false,
       "component": "landing-page-layout.join-section"
     },
-    "whyInstaller": {
+    "whyInstaletterSection": {
       "type": "component",
       "repeatable": true,
       "component": "landing-page-layout.why-us"
+    },
+    "atAGlanceSection": {
+      "type": "component",
+      "repeatable": false,
+      "component": "landing-page-layout.at-a-glance-section"
+    },
+    "CustomerStoriesSection": {
+      "displayName": "Customer Stories",
+      "type": "component",
+      "repeatable": false,
+      "component": "landing-page-layout.customer-stories"
+    },
+    "testimonialSection": {
+      "displayName": "Testimonial Section",
+      "type": "component",
+      "repeatable": false,
+      "component": "landing-page-layout.testimonial-section"
+    },
+    "faqSection": {
+      "displayName": "Faq Section",
+      "type": "component",
+      "repeatable": false,
+      "component": "landing-page-layout.faq-section"
+    },
+    "newsletterSection": {
+      "displayName": "Newsletter Section",
+      "type": "component",
+      "repeatable": false,
+      "component": "landing-page-layout.newsletter-section"
     }
   }
 }

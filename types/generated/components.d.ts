@@ -4,14 +4,46 @@ export interface LandingPageLayoutAtAGlanceSection extends Schema.Component {
   collectionName: 'components_landing_page_layout_at_a_glance_sections';
   info: {
     displayName: 'At a glance section';
+    description: '';
   };
   attributes: {
     subheading: Attribute.String;
-    sectionHeading: Attribute.String;
+    heading: Attribute.String;
     sectionItem: Attribute.Component<
       'structural-components.at-a-glance-section-item',
       true
     >;
+    paragraph: Attribute.Text;
+  };
+}
+
+export interface LandingPageLayoutCustomerStories extends Schema.Component {
+  collectionName: 'components_landing_page_layout_customer_stories';
+  info: {
+    displayName: 'Customer Stories';
+    description: '';
+  };
+  attributes: {
+    subheading: Attribute.String;
+    heading: Attribute.String;
+    accomplishments: Attribute.Component<
+      'structural-components.accomplishment',
+      true
+    >;
+    sectionImage: Attribute.Media;
+  };
+}
+
+export interface LandingPageLayoutFaqSection extends Schema.Component {
+  collectionName: 'components_landing_page_layout_faq_sections';
+  info: {
+    displayName: 'Faq Section';
+  };
+  attributes: {
+    heading: Attribute.String;
+    subheading: Attribute.String;
+    paragraph: Attribute.Text;
+    faq: Attribute.Component<'structural-components.faqs', true>;
   };
 }
 
@@ -51,6 +83,36 @@ export interface LandingPageLayoutJoinSection extends Schema.Component {
   };
 }
 
+export interface LandingPageLayoutNewsletterSection extends Schema.Component {
+  collectionName: 'components_landing_page_layout_newsletter_sections';
+  info: {
+    displayName: 'Newsletter Section';
+    description: '';
+  };
+  attributes: {
+    heading: Attribute.String;
+    paragraph: Attribute.Text;
+    privacyParagraph: Attribute.String;
+    sectionImage: Attribute.Media;
+  };
+}
+
+export interface LandingPageLayoutTestimonialSection extends Schema.Component {
+  collectionName: 'components_landing_page_layout_testimonial_sections';
+  info: {
+    displayName: 'Testimonial Section';
+  };
+  attributes: {
+    heading: Attribute.String;
+    paragraph: Attribute.Text;
+    sectionImage: Attribute.Media;
+    testimonials: Attribute.Component<
+      'structural-components.testimonial',
+      true
+    >;
+  };
+}
+
 export interface LandingPageLayoutWhyUs extends Schema.Component {
   collectionName: 'components_landing_page_layout_why_uses';
   info: {
@@ -81,6 +143,17 @@ export interface SharedComponentsButton extends Schema.Component {
   };
 }
 
+export interface StructuralComponentsAccomplishment extends Schema.Component {
+  collectionName: 'components_structural_components_accomplishments';
+  info: {
+    displayName: 'accomplishment';
+  };
+  attributes: {
+    number: Attribute.String;
+    text: Attribute.String;
+  };
+}
+
 export interface StructuralComponentsAtAGlanceSectionItem
   extends Schema.Component {
   collectionName: 'components_structural_components_at_a_glance_section_items';
@@ -105,6 +178,17 @@ export interface StructuralComponentsCompaniesLogo extends Schema.Component {
   };
 }
 
+export interface StructuralComponentsFaqs extends Schema.Component {
+  collectionName: 'components_structural_components_faqs';
+  info: {
+    displayName: 'faqs';
+  };
+  attributes: {
+    question: Attribute.String;
+    answer: Attribute.Text;
+  };
+}
+
 export interface StructuralComponentsPoints extends Schema.Component {
   collectionName: 'components_landing_page_layout_points';
   info: {
@@ -118,17 +202,41 @@ export interface StructuralComponentsPoints extends Schema.Component {
   };
 }
 
+export interface StructuralComponentsTestimonial extends Schema.Component {
+  collectionName: 'components_structural_components_testimonials';
+  info: {
+    displayName: 'testimonial';
+  };
+  attributes: {
+    content: Attribute.Text;
+    username: Attribute.String;
+    userDesignation: Attribute.String;
+    rating: Attribute.Integer &
+      Attribute.SetMinMax<{
+        min: 1;
+        max: 5;
+      }>;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Shared {
     export interface Components {
       'landing-page-layout.at-a-glance-section': LandingPageLayoutAtAGlanceSection;
+      'landing-page-layout.customer-stories': LandingPageLayoutCustomerStories;
+      'landing-page-layout.faq-section': LandingPageLayoutFaqSection;
       'landing-page-layout.hero-section': LandingPageLayoutHeroSection;
       'landing-page-layout.join-section': LandingPageLayoutJoinSection;
+      'landing-page-layout.newsletter-section': LandingPageLayoutNewsletterSection;
+      'landing-page-layout.testimonial-section': LandingPageLayoutTestimonialSection;
       'landing-page-layout.why-us': LandingPageLayoutWhyUs;
       'shared-components.button': SharedComponentsButton;
+      'structural-components.accomplishment': StructuralComponentsAccomplishment;
       'structural-components.at-a-glance-section-item': StructuralComponentsAtAGlanceSectionItem;
       'structural-components.companies-logo': StructuralComponentsCompaniesLogo;
+      'structural-components.faqs': StructuralComponentsFaqs;
       'structural-components.points': StructuralComponentsPoints;
+      'structural-components.testimonial': StructuralComponentsTestimonial;
     }
   }
 }

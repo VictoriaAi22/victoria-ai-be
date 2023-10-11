@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_structural_components_testimonials",
+  "info": {
+    "displayName": "testimonial"
+  },
+  "options": {},
+  "attributes": {
+    "content": {
+      "type": "text"
+    },
+    "username": {
+      "type": "string"
+    },
+    "userDesignation": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "integer",
+      "max": 5,
+      "min": 1
+    }
+  }
+}
