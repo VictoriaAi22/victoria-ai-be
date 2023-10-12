@@ -403,6 +403,43 @@ export interface ApiLandingPageLandingPage extends Schema.SingleType {
   };
 }
 
+export interface ApiVerificationCodeVerificationCode
+  extends Schema.CollectionType {
+  collectionName: 'verification_codes';
+  info: {
+    singularName: 'verification-code';
+    pluralName: 'verification-codes';
+    displayName: 'verification-code';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    code: Attribute.String;
+    status: Attribute.Boolean;
+    users_permissions_user: Attribute.Relation<
+      'api::verification-code.verification-code',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::verification-code.verification-code',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::verification-code.verification-code',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -735,6 +772,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::landing-page.landing-page': ApiLandingPageLandingPage;
+      'api::verification-code.verification-code': ApiVerificationCodeVerificationCode;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;

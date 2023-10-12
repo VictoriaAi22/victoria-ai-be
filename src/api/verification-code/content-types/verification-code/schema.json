@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "verification_codes",
+  "info": {
+    "singularName": "verification-code",
+    "pluralName": "verification-codes",
+    "displayName": "verification-code"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "code": {
+      "type": "string"
+    },
+    "status": {
+      "type": "boolean"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}
