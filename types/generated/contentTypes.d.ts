@@ -403,6 +403,30 @@ export interface ApiLandingPageLandingPage extends Schema.SingleType {
   };
 }
 
+export interface ApiPlanPlan extends Schema.CollectionType {
+  collectionName: 'plans';
+  info: {
+    singularName: 'plan';
+    pluralName: 'plans';
+    displayName: 'Plan';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Title: Attribute.String & Attribute.Required;
+    Price: Attribute.Float & Attribute.Required;
+    benefits: Attribute.Component<'plan.plan-benefit', true>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiVerificationCodeVerificationCode
   extends Schema.CollectionType {
   collectionName: 'verification_codes';
@@ -410,6 +434,7 @@ export interface ApiVerificationCodeVerificationCode
     singularName: 'verification-code';
     pluralName: 'verification-codes';
     displayName: 'verification-code';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -417,7 +442,7 @@ export interface ApiVerificationCodeVerificationCode
   attributes: {
     code: Attribute.String;
     status: Attribute.Boolean;
-    users_permissions_user: Attribute.Relation<
+    user: Attribute.Relation<
       'api::verification-code.verification-code',
       'oneToOne',
       'plugin::users-permissions.user'
@@ -772,6 +797,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::landing-page.landing-page': ApiLandingPageLandingPage;
+      'api::plan.plan': ApiPlanPlan;
       'api::verification-code.verification-code': ApiVerificationCodeVerificationCode;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;

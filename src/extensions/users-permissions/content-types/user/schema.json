@@ -85,15 +85,10 @@
       "type": "string",
       "unique": true
     },
-    "stripeSubscriptionId": {
-      "type": "string",
-      "unique": true
-    },
-    "stripePricingId": {
-      "type": "string"
-    },
-    "stripeCurrentPeriodEnd": {
-      "type": "string"
+    "plan": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::plan.plan"
     }
   }
 }

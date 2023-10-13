@@ -162,6 +162,16 @@ export interface LandingPageLayoutWhyUs extends Schema.Component {
   };
 }
 
+export interface PlanPlanBenefit extends Schema.Component {
+  collectionName: 'components_plan_plan_benefits';
+  info: {
+    displayName: 'Plan benefit';
+  };
+  attributes: {
+    text: Attribute.String;
+  };
+}
+
 export interface SharedComponentsButton extends Schema.Component {
   collectionName: 'components_landing_page_layout_buttons';
   info: {
@@ -268,6 +278,7 @@ declare module '@strapi/strapi' {
       'landing-page-layout.newsletter-section': LandingPageLayoutNewsletterSection;
       'landing-page-layout.testimonial-section': LandingPageLayoutTestimonialSection;
       'landing-page-layout.why-us': LandingPageLayoutWhyUs;
+      'plan.plan-benefit': PlanPlanBenefit;
       'shared-components.button': SharedComponentsButton;
       'structural-components.accomplishment': StructuralComponentsAccomplishment;
       'structural-components.at-a-glance-section-item': StructuralComponentsAtAGlanceSectionItem;

@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "plans",
+  "info": {
+    "singularName": "plan",
+    "pluralName": "plans",
+    "displayName": "Plan"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true
+    },
+    "Price": {
+      "type": "float",
+      "required": true
+    },
+    "benefits": {
+      "displayName": "Plan benefit",
+      "type": "component",
+      "repeatable": true,
+      "component": "plan.plan-benefit"
+    }
+  }
+}

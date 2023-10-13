@@ -95,6 +95,8 @@ module.exports = {
   async verifyCode(ctx) {
     const { code, email } = ctx.request.body;
 
+    console.log(ctx);
+
     // Query the verification code based on the provided code and email
     const verificationCode = await strapi
       .query("api::verification-code.verification-code")
