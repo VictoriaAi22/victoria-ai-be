@@ -1,6 +1,9 @@
 // api/verification-code/controllers/VerificationCode.js
 
 module.exports = {
+  /**
+   * @param {{ request: { body: { email: any; }; }; throw: (arg0: number, arg1: string) => any; send: (arg0: { status: boolean; message: string; }) => void; }} ctx
+   */
   async sendCode(ctx) {
     const { email } = ctx.request.body;
 
@@ -86,8 +89,12 @@ module.exports = {
     ctx.send({ status: true, message: "Reset code sent successfully" });
   },
 
+  /**
+   * @param {{ request: { body: { code: any; email: any; }; }; throw: (arg0: number, arg1: string) => any; send: (arg0: { status: boolean; message: string; }) => void; }} ctx
+   */
   async verifyCode(ctx) {
     const { code, email } = ctx.request.body;
+    console.log("This is the email and code", email, code);
 
     // Query the verification code based on the provided code and email
     const verificationCode = await strapi
@@ -119,6 +126,9 @@ module.exports = {
     ctx.send({ status: true, message: "Verification code is valid" });
   },
 
+  /**
+   * @param {{ request: { body: { code: any; email: any; newPassword: any; }; }; throw: (arg0: number, arg1: string) => any; send: (arg0: { status: boolean; message: string; }) => void; }} ctx
+   */
   async resetPassword(ctx) {
     const { code, email, newPassword } = ctx.request.body;
 
