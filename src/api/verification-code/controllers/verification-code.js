@@ -2,11 +2,11 @@
  * verification-code controller
  */
 
-import { factories } from "@strapi/strapi";
+// import { factories } from "@strapi/strapi";
 
-export default factories.createCoreController(
-  "api::verification-code.verification-code"
-);
+// export default factories.createCoreController(
+//   "api::verification-code.verification-code"
+// );
 // api/verification-code/controllers/VerificationCode.js
 
 module.exports = {
