@@ -1,3 +1,12 @@
+/**
+ * verification-code controller
+ */
+
+import { factories } from "@strapi/strapi";
+
+export default factories.createCoreController(
+  "api::verification-code.verification-code"
+);
 // api/verification-code/controllers/VerificationCode.js
 
 module.exports = {
@@ -63,27 +72,27 @@ module.exports = {
       .service("email")
       .send({
         to: email, // Replace with the user's email
-        from: process.env.SMTP_USERNAME,
+        from: "Administration Panel <process.env.SMTP_USERNAME>",
         subject: "Password Reset for Instaletter",
         text: `Hello,
 
-    You have requested to reset your password for your Instaletter account.
+      You have requested to reset your password for your Instaletter account.
 
-    Please use the following 4-digit code to proceed with the password reset:
-    Code: ${resetCode}
+      Please use the following 4-digit code to proceed with the password reset:
+      Code: ${resetCode}
 
-    If you did not initiate this request, you can safely ignore this email.
+      If you did not initiate this request, you can safely ignore this email.
 
-    Best regards,
-    The Torque Team`,
+      Best regards,
+      The Instaletter team`,
         html: `
-        <h4>Password Reset for instaletter</h4>
-        <p>You have requested to reset your password for your Instaletter account.</p>
-        <p>Please use the following 4-digit code to proceed with the password reset:</p>
-        <p><strong>Code: ${resetCode}</strong></p>
-        <p>If you did not initiate this request, you can safely ignore this email.</p>
-        <p>Best regards,<br />The Instaletter Team</p>
-      `,
+          <h4>Password Reset for Instaletter</h4>
+          <p>You have requested to reset your password for your Instaletter account.</p>
+          <p>Please use the following 4-digit code to proceed with the password reset:</p>
+          <p><strong>Code: ${resetCode}</strong></p>
+          <p>If you did not initiate this request, you can safely ignore this email.</p>
+          <p>Best regards,<br />The Instaletter Team</p>
+        `,
       });
 
     ctx.send({ status: true, message: "Reset code sent successfully" });
@@ -94,7 +103,6 @@ module.exports = {
    */
   async verifyCode(ctx) {
     const { code, email } = ctx.request.body;
-    console.log("This is the email and code", email, code);
 
     // Query the verification code based on the provided code and email
     const verificationCode = await strapi
@@ -177,10 +185,15 @@ module.exports = {
       data: { password: hashedPassword },
     });
 
-    // Mark the verification code as used (optional)
-    await strapi.query("api::verification-code.verification-code").update({
+    // // Mark the verification code as used (optional)
+    // await strapi.query('api::verification-code.verification-code').update({
+    //   where: { id: verificationCode.id },
+    //   data: { status: true },
+    // });
+
+    // delete id
+    await strapi.query("api::verification-code.verification-code").delete({
       where: { id: verificationCode.id },
-      data: { status: true },
     });
 
     ctx.send({ status: true, message: "Password reset successful" });
