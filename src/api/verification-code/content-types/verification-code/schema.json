@@ -4,7 +4,8 @@
   "info": {
     "singularName": "verification-code",
     "pluralName": "verification-codes",
-    "displayName": "verification-code"
+    "displayName": "verification-code",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -17,7 +18,7 @@
     "status": {
       "type": "boolean"
     },
-    "users_permissions_user": {
+    "user": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
