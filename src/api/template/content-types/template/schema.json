@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "templates",
+  "info": {
+    "singularName": "template",
+    "pluralName": "templates",
+    "displayName": "Template",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "coverLetter": {
+      "displayName": "Cover Letter",
+      "type": "component",
+      "repeatable": false,
+      "component": "template-components.cover-letter"
+    },
+    "resune": {
+      "type": "component",
+      "repeatable": true,
+      "component": "template-components.resume"
+    }
+  }
+}

@@ -166,9 +166,11 @@ export interface PlanPlanBenefit extends Schema.Component {
   collectionName: 'components_plan_plan_benefits';
   info: {
     displayName: 'Plan benefit';
+    description: '';
   };
   attributes: {
     text: Attribute.String;
+    totalDownloads: Attribute.Integer & Attribute.Required;
   };
 }
 
@@ -264,6 +266,54 @@ export interface StructuralComponentsTestimonial extends Schema.Component {
   };
 }
 
+export interface TemplateComponentsCoverLetter extends Schema.Component {
+  collectionName: 'components_template_components_cover_letters';
+  info: {
+    displayName: 'Cover Letter';
+  };
+  attributes: {
+    previewImage: Attribute.Media;
+    section: Attribute.Component<'template-components.sections', true>;
+  };
+}
+
+export interface TemplateComponentsCustomSections extends Schema.Component {
+  collectionName: 'components_template_components_custom_sections';
+  info: {
+    displayName: 'custom sections';
+  };
+  attributes: {
+    points: Attribute.Text;
+  };
+}
+
+export interface TemplateComponentsResume extends Schema.Component {
+  collectionName: 'components_template_components_resumes';
+  info: {
+    displayName: 'resume';
+    description: '';
+  };
+  attributes: {
+    previewImage: Attribute.Media;
+    sections: Attribute.Component<'template-components.sections', true>;
+    customSection: Attribute.Component<
+      'template-components.custom-sections',
+      true
+    >;
+  };
+}
+
+export interface TemplateComponentsSections extends Schema.Component {
+  collectionName: 'components_template_components_sections';
+  info: {
+    displayName: 'Sections';
+  };
+  attributes: {
+    title: Attribute.String;
+    content: Attribute.Text;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Shared {
     export interface Components {
@@ -286,6 +336,10 @@ declare module '@strapi/strapi' {
       'structural-components.faqs': StructuralComponentsFaqs;
       'structural-components.points': StructuralComponentsPoints;
       'structural-components.testimonial': StructuralComponentsTestimonial;
+      'template-components.cover-letter': TemplateComponentsCoverLetter;
+      'template-components.custom-sections': TemplateComponentsCustomSections;
+      'template-components.resume': TemplateComponentsResume;
+      'template-components.sections': TemplateComponentsSections;
     }
   }
 }

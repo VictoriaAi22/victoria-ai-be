@@ -361,110 +361,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiLandingPageLandingPage extends Schema.SingleType {
-  collectionName: 'landing_pages';
-  info: {
-    singularName: 'landing-page';
-    pluralName: 'landing-pages';
-    displayName: 'Landing Page';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    HeroSection: Attribute.Component<'landing-page-layout.hero-section', true>;
-    JoinSection: Attribute.Component<'landing-page-layout.join-section'>;
-    whyInstaletterSection: Attribute.Component<
-      'landing-page-layout.why-us',
-      true
-    >;
-    atAGlanceSection: Attribute.Component<'landing-page-layout.at-a-glance-section'>;
-    CustomerStoriesSection: Attribute.Component<'landing-page-layout.customer-stories'>;
-    testimonialSection: Attribute.Component<'landing-page-layout.testimonial-section'>;
-    faqSection: Attribute.Component<'landing-page-layout.faq-section'>;
-    newsletterSection: Attribute.Component<'landing-page-layout.newsletter-section'>;
-    footerSection: Attribute.Component<'landing-page-layout.footer-section'>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::landing-page.landing-page',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::landing-page.landing-page',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiPlanPlan extends Schema.CollectionType {
-  collectionName: 'plans';
-  info: {
-    singularName: 'plan';
-    pluralName: 'plans';
-    displayName: 'Plan';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    Title: Attribute.String & Attribute.Required;
-    Price: Attribute.Float & Attribute.Required;
-    benefits: Attribute.Component<'plan.plan-benefit', true>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiVerificationCodeVerificationCode
-  extends Schema.CollectionType {
-  collectionName: 'verification_codes';
-  info: {
-    singularName: 'verification-code';
-    pluralName: 'verification-codes';
-    displayName: 'verification-code';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    code: Attribute.String;
-    status: Attribute.Boolean;
-    user: Attribute.Relation<
-      'api::verification-code.verification-code',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::verification-code.verification-code',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::verification-code.verification-code',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -771,6 +667,8 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToOne',
       'api::plan.plan'
     >;
+    availableDownloads: Attribute.Integer;
+    availbleRegeneration: Attribute.Integer;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -788,6 +686,147 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiLandingPageLandingPage extends Schema.SingleType {
+  collectionName: 'landing_pages';
+  info: {
+    singularName: 'landing-page';
+    pluralName: 'landing-pages';
+    displayName: 'Landing Page';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    HeroSection: Attribute.Component<'landing-page-layout.hero-section', true>;
+    JoinSection: Attribute.Component<'landing-page-layout.join-section'>;
+    whyInstaletterSection: Attribute.Component<
+      'landing-page-layout.why-us',
+      true
+    >;
+    atAGlanceSection: Attribute.Component<'landing-page-layout.at-a-glance-section'>;
+    CustomerStoriesSection: Attribute.Component<'landing-page-layout.customer-stories'>;
+    testimonialSection: Attribute.Component<'landing-page-layout.testimonial-section'>;
+    faqSection: Attribute.Component<'landing-page-layout.faq-section'>;
+    newsletterSection: Attribute.Component<'landing-page-layout.newsletter-section'>;
+    footerSection: Attribute.Component<'landing-page-layout.footer-section'>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::landing-page.landing-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::landing-page.landing-page',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiPlanPlan extends Schema.CollectionType {
+  collectionName: 'plans';
+  info: {
+    singularName: 'plan';
+    pluralName: 'plans';
+    displayName: 'Plan';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Title: Attribute.String & Attribute.Required;
+    Price: Attribute.Float & Attribute.Required;
+    benefits: Attribute.Component<'plan.plan-benefit', true> &
+      Attribute.Required;
+    totalDowloads: Attribute.Integer & Attribute.Required;
+    totalRegeneration: Attribute.Integer & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::plan.plan', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiTemplateTemplate extends Schema.CollectionType {
+  collectionName: 'templates';
+  info: {
+    singularName: 'template';
+    pluralName: 'templates';
+    displayName: 'Template';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    coverLetter: Attribute.Component<'template-components.cover-letter'>;
+    resune: Attribute.Component<'template-components.resume', true>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::template.template',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::template.template',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiVerificationCodeVerificationCode
+  extends Schema.CollectionType {
+  collectionName: 'verification_codes';
+  info: {
+    singularName: 'verification-code';
+    pluralName: 'verification-codes';
+    displayName: 'verification-code';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    code: Attribute.String;
+    status: Attribute.Boolean;
+    user: Attribute.Relation<
+      'api::verification-code.verification-code',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::verification-code.verification-code',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::verification-code.verification-code',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Shared {
     export interface ContentTypes {
@@ -798,15 +837,16 @@ declare module '@strapi/strapi' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::landing-page.landing-page': ApiLandingPageLandingPage;
-      'api::plan.plan': ApiPlanPlan;
-      'api::verification-code.verification-code': ApiVerificationCodeVerificationCode;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::landing-page.landing-page': ApiLandingPageLandingPage;
+      'api::plan.plan': ApiPlanPlan;
+      'api::template.template': ApiTemplateTemplate;
+      'api::verification-code.verification-code': ApiVerificationCodeVerificationCode;
     }
   }
 }

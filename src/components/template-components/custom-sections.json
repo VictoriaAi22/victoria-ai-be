@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_template_components_custom_sections",
+  "info": {
+    "displayName": "custom sections"
+  },
+  "options": {},
+  "attributes": {
+    "points": {
+      "type": "text"
+    }
+  }
+}

@@ -1,12 +1,17 @@
 {
   "collectionName": "components_plan_plan_benefits",
   "info": {
-    "displayName": "Plan benefit"
+    "displayName": "Plan benefit",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "text": {
       "type": "string"
+    },
+    "totalDownloads": {
+      "type": "integer",
+      "required": true
     }
   }
 }

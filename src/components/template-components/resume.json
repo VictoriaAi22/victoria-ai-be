@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_template_components_resumes",
+  "info": {
+    "displayName": "resume",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "previewImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "sections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "template-components.sections"
+    },
+    "customSection": {
+      "displayName": "custom sections",
+      "type": "component",
+      "repeatable": true,
+      "component": "template-components.custom-sections"
+    }
+  }
+}

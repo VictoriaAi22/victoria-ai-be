@@ -4,7 +4,8 @@
   "info": {
     "singularName": "plan",
     "pluralName": "plans",
-    "displayName": "Plan"
+    "displayName": "Plan",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -23,7 +24,16 @@
       "displayName": "Plan benefit",
       "type": "component",
       "repeatable": true,
-      "component": "plan.plan-benefit"
+      "component": "plan.plan-benefit",
+      "required": true
+    },
+    "totalDowloads": {
+      "type": "integer",
+      "required": true
+    },
+    "totalRegeneration": {
+      "type": "integer",
+      "required": true
     }
   }
 }

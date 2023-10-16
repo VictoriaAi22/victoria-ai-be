@@ -89,6 +89,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::plan.plan"
+    },
+    "availableDownloads": {
+      "type": "integer"
+    },
+    "availbleRegeneration": {
+      "type": "integer"
     }
   }
 }

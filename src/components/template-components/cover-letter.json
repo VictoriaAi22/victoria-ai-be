@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_template_components_cover_letters",
+  "info": {
+    "displayName": "Cover Letter"
+  },
+  "options": {},
+  "attributes": {
+    "previewImage": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "section": {
+      "displayName": "Sections",
+      "type": "component",
+      "repeatable": true,
+      "component": "template-components.sections"
+    }
+  }
+}
