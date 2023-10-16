@@ -42,6 +42,7 @@ module.exports = {
         data: {
           code: resetCode,
           user: user.id,
+          status: false,
         },
       });
 
@@ -107,6 +108,12 @@ module.exports = {
           code: code,
         },
       });
+    console.log(
+      verificationCode,
+      code,
+      email,
+      await strapi.query("api::verification-code.verification-code")
+    );
 
     if (!verificationCode) {
       return ctx.throw(400, "Invalid verification code");

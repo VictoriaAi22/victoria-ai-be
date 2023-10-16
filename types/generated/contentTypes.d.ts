@@ -766,9 +766,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     first_name: Attribute.String & Attribute.Required;
     last_name: Attribute.String & Attribute.Required;
     stripeCustomerId: Attribute.String & Attribute.Unique;
-    stripeSubscriptionId: Attribute.String & Attribute.Unique;
-    stripePricingId: Attribute.String;
-    stripeCurrentPeriodEnd: Attribute.String;
+    plan: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::plan.plan'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
