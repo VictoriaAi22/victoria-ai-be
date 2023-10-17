@@ -686,6 +686,49 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiClientProfileClientProfile extends Schema.CollectionType {
+  collectionName: 'client_profiles';
+  info: {
+    singularName: 'client-profile';
+    pluralName: 'client-profiles';
+    displayName: 'Client Profile';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    users_permissions_user: Attribute.Relation<
+      'api::client-profile.client-profile',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    plan: Attribute.Relation<
+      'api::client-profile.client-profile',
+      'oneToOne',
+      'api::plan.plan'
+    >;
+    totalRegenerationLeft: Attribute.Integer &
+      Attribute.Required &
+      Attribute.DefaultTo<0>;
+    totalDownloadsLeft: Attribute.Integer & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::client-profile.client-profile',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::client-profile.client-profile',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiLandingPageLandingPage extends Schema.SingleType {
   collectionName: 'landing_pages';
   info: {
@@ -789,6 +832,40 @@ export interface ApiTemplateTemplate extends Schema.CollectionType {
   };
 }
 
+export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
+  collectionName: 'user_documents';
+  info: {
+    singularName: 'user-document';
+    pluralName: 'user-documents';
+    displayName: 'User Document';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    users_permissions_user: Attribute.Relation<
+      'api::user-document.user-document',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::user-document.user-document',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::user-document.user-document',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiVerificationCodeVerificationCode
   extends Schema.CollectionType {
   collectionName: 'verification_codes';
@@ -843,9 +920,11 @@ declare module '@strapi/strapi' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::client-profile.client-profile': ApiClientProfileClientProfile;
       'api::landing-page.landing-page': ApiLandingPageLandingPage;
       'api::plan.plan': ApiPlanPlan;
       'api::template.template': ApiTemplateTemplate;
+      'api::user-document.user-document': ApiUserDocumentUserDocument;
       'api::verification-code.verification-code': ApiVerificationCodeVerificationCode;
     }
   }

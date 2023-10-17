@@ -307,10 +307,12 @@ export interface TemplateComponentsSections extends Schema.Component {
   collectionName: 'components_template_components_sections';
   info: {
     displayName: 'Sections';
+    description: '';
   };
   attributes: {
     title: Attribute.String;
     content: Attribute.Text;
+    subtitle: Attribute.String;
   };
 }
 

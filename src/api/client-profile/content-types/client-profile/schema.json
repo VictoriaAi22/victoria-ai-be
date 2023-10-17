@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "client_profiles",
+  "info": {
+    "singularName": "client-profile",
+    "pluralName": "client-profiles",
+    "displayName": "Client Profile"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "plan": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::plan.plan"
+    },
+    "totalRegenerationLeft": {
+      "required": true,
+      "default": 0,
+      "type": "integer"
+    },
+    "totalDownloadsLeft": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}
