@@ -1,16 +1,9 @@
 {
-  "kind": "collectionType",
-  "collectionName": "templates",
+  "collectionName": "components_template_components_template",
   "info": {
-    "singularName": "template",
-    "pluralName": "templates",
-    "displayName": "Template",
-    "description": ""
+    "displayName": "Template"
   },
-  "options": {
-    "draftAndPublish": true
-  },
-  "pluginOptions": {},
+  "options": {},
   "attributes": {
     "title": {
       "type": "string"

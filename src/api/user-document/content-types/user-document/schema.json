@@ -15,6 +15,14 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "title": {
+      "type": "string"
+    },
+    "template": {
+      "type": "component",
+      "component": "template-components.template",
+      "repeatable": false
     }
   }
 }

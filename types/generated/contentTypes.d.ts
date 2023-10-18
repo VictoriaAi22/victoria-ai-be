@@ -813,7 +813,7 @@ export interface ApiTemplateTemplate extends Schema.CollectionType {
   attributes: {
     title: Attribute.String;
     coverLetter: Attribute.Component<'template-components.cover-letter'>;
-    resune: Attribute.Component<'template-components.resume', true>;
+    resume: Attribute.Component<'template-components.resume', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -848,6 +848,8 @@ export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
+    title: Attribute.String;
+    template: Attribute.Component<'template-components.template'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

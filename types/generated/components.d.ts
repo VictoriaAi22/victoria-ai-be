@@ -316,6 +316,18 @@ export interface TemplateComponentsSections extends Schema.Component {
   };
 }
 
+export interface TemplateComponentsTemplate extends Schema.Component {
+  collectionName: 'components_template_components_template';
+  info: {
+    displayName: 'Template';
+  };
+  attributes: {
+    title: Attribute.String;
+    coverLetter: Attribute.Component<'template-components.cover-letter'>;
+    resume: Attribute.Component<'template-components.resume', true>;
+  };
+}
+
 declare module '@strapi/strapi' {
   export module Shared {
     export interface Components {
@@ -342,6 +354,7 @@ declare module '@strapi/strapi' {
       'template-components.custom-sections': TemplateComponentsCustomSections;
       'template-components.resume': TemplateComponentsResume;
       'template-components.sections': TemplateComponentsSections;
+      'template-components.template': TemplateComponentsTemplate;
     }
   }
 }
