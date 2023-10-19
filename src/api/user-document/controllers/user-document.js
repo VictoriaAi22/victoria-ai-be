@@ -148,7 +148,7 @@ module.exports = {
   async updateDocument(ctx) {},
   async deleteDocument(ctx) {
     const { id } = ctx.params;
-    const { user } = ctx.user;
+    const { user } = ctx.state;
 
     const findUserDoc = await strapi.db
       .query("api::user-document.user-document")
