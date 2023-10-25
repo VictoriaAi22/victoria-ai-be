@@ -789,6 +789,7 @@ export interface ApiPlanPlan extends Schema.CollectionType {
       Attribute.Required;
     totalDowloads: Attribute.Integer & Attribute.Required;
     totalRegeneration: Attribute.Integer & Attribute.Required;
+    subtitle: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

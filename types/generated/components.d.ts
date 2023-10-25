@@ -170,7 +170,6 @@ export interface PlanPlanBenefit extends Schema.Component {
   };
   attributes: {
     text: Attribute.String;
-    totalDownloads: Attribute.Integer & Attribute.Required;
   };
 }
 

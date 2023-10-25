@@ -8,10 +8,6 @@
   "attributes": {
     "text": {
       "type": "string"
-    },
-    "totalDownloads": {
-      "type": "integer",
-      "required": true
     }
   }
 }
