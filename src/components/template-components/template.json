@@ -16,7 +16,7 @@
     },
     "resume": {
       "type": "component",
-      "repeatable": true,
+      "repeatable": false,
       "component": "template-components.resume"
     }
   }

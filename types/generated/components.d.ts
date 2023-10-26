@@ -323,7 +323,7 @@ export interface TemplateComponentsTemplate extends Schema.Component {
   attributes: {
     title: Attribute.String;
     coverLetter: Attribute.Component<'template-components.cover-letter'>;
-    resume: Attribute.Component<'template-components.resume', true>;
+    resume: Attribute.Component<'template-components.resume'>;
   };
 }
 
