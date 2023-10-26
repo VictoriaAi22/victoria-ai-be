@@ -23,7 +23,7 @@
     },
     "resume": {
       "type": "component",
-      "repeatable": false,
+      "repeatable": true,
       "component": "template-components.resume"
     }
   }
