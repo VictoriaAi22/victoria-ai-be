@@ -103,7 +103,7 @@ module.exports = {
             populate: {
               coverLetter: {
                 populate: {
-                  section: true,
+                  sections: true,
                   previewImage: true,
                 },
               },
@@ -152,7 +152,7 @@ module.exports = {
             populate: {
               coverLetter: {
                 populate: {
-                  section: true,
+                  sections: true,
                   previewImage: true,
                 },
               },
