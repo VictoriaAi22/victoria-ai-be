@@ -160,7 +160,6 @@ module.exports = {
                 populate: {
                   sections: true,
                   previewImage: true,
-                  customSection: true,
                 },
               },
             },
