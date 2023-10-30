@@ -6,14 +6,17 @@
   },
   "options": {},
   "attributes": {
-    "title": {
+    "sectionTitle": {
+      "type": "string"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "subheading": {
       "type": "string"
     },
     "content": {
-      "type": "text"
-    },
-    "subtitle": {
-      "type": "string"
+      "type": "richtext"
     }
   }
 }

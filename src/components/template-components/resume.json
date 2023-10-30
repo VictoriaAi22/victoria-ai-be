@@ -16,12 +16,6 @@
       "type": "component",
       "repeatable": true,
       "component": "template-components.sections"
-    },
-    "customSection": {
-      "displayName": "custom sections",
-      "type": "component",
-      "repeatable": true,
-      "component": "template-components.custom-sections"
     }
   }
 }

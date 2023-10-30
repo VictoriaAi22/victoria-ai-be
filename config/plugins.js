@@ -46,4 +46,29 @@ module.exports = ({ env }) => ({
     },
   },
   // ...
+  ckeditor: {
+    enabled: true,
+    config: {
+      plugin: {
+        toolbar: {
+          items: [
+            "bulletedList",
+            "numberedList",
+            "|",
+            "link",
+            "|",
+            "superscript",
+            "strikethrough",
+            "specialCharacters",
+            "|",
+            "indent",
+            "|",
+            "undo",
+            "redo",
+          ],
+        },
+      },
+    },
+  },
+  // ...
 });

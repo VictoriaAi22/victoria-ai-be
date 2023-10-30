@@ -10,6 +10,8 @@
     "strapi": "strapi"
   },
   "dependencies": {
+    "@_sh/strapi-plugin-ckeditor": "^2.0.4",
+    "@ckeditor/strapi-plugin-ckeditor": "^0.0.10",
     "@strapi/plugin-color-picker": "^4.14.3",
     "@strapi/plugin-graphql": "^4.13.7",
     "@strapi/plugin-i18n": "4.13.7",

@@ -813,8 +813,7 @@ export interface ApiTemplateTemplate extends Schema.CollectionType {
   };
   attributes: {
     title: Attribute.String;
-    coverLetter: Attribute.Component<'template-components.cover-letter'>;
-    resume: Attribute.Component<'template-components.resume'>;
+    template: Attribute.Component<'template-components.template'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

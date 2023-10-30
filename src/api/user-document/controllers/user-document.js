@@ -13,22 +13,47 @@ module.exports = {
     const { templateId, company } = ctx.request.body;
 
     // Find the template
+    // const template = await strapi.entityService.findOne(
+    //   "api::template.template",
+    //   templateId,
+    //   {
+    //     populate: {
+    //       coverLetter: {
+    //         populate: {
+    //           section: true,
+    //           previewImage: true,
+    //         },
+    //       },
+    //       resume: {
+    //         populate: {
+    //           sections: true,
+    //           previewImage: true,
+    //           customSection: true,
+    //         },
+    //       },
+    //     },
+    //   }
+    // );
+
     const template = await strapi.entityService.findOne(
       "api::template.template",
       templateId,
       {
         populate: {
-          coverLetter: {
+          template: {
             populate: {
-              section: true,
-              previewImage: true,
-            },
-          },
-          resume: {
-            populate: {
-              sections: true,
-              previewImage: true,
-              customSection: true,
+              coverLetter: {
+                populate: {
+                  section: true,
+                  previewImage: true,
+                },
+              },
+              resume: {
+                populate: {
+                  sections: true,
+                  previewImage: true,
+                },
+              },
             },
           },
         },
@@ -45,11 +70,7 @@ module.exports = {
         data: {
           users_permissions_user: user.id,
           title: company || "",
-          template: {
-            coverLetter: template.coverLetter,
-            resume: template.resume,
-            title: template.title,
-          },
+          template: template.template,
         },
       }
     );
@@ -145,7 +166,33 @@ module.exports = {
       status: true,
     });
   },
-  async updateDocument(ctx) {},
+
+  // async updateDocument(ctx) {
+  //   const { id } = ctx.params;
+  //   const { user } = ctx.state;
+  //   const { body } = ctx.request;
+
+  //   // Check if the user is the owner of the document
+  //   const findUserDoc = await strapi.db
+  //     .query("api::user-document.user-document")
+  //     .findOne({
+  //       where: {
+  //         users_permissions_user: user.id,
+  //         id,
+  //       },
+  //     });
+
+  //   if (!findUserDoc) return ctx.throw(404, "document not found");
+
+  //   const docUpdate = await strapi.entityService.update(
+  //     "api::user-document.user-document",
+  //     id,
+  //     {
+  //       data: body,
+  //     }
+  //   );
+  // },
+
   async deleteDocument(ctx) {
     const { id } = ctx.params;
     const { user } = ctx.state;

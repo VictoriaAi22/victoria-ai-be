@@ -6,16 +6,11 @@
   "options": {},
   "attributes": {
     "previewImage": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ],
+      "allowedTypes": ["images", "files", "videos", "audios"],
       "type": "media",
       "multiple": false
     },
-    "section": {
+    "sections": {
       "displayName": "Sections",
       "type": "component",
       "repeatable": true,

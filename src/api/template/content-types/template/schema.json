@@ -15,16 +15,11 @@
     "title": {
       "type": "string"
     },
-    "coverLetter": {
-      "displayName": "Cover Letter",
+    "template": {
+      "displayName": "Template",
       "type": "component",
       "repeatable": false,
-      "component": "template-components.cover-letter"
-    },
-    "resume": {
-      "type": "component",
-      "repeatable": true,
-      "component": "template-components.resume"
+      "component": "template-components.template"
     }
   }
 }
