@@ -83,6 +83,7 @@ module.exports = {
   },
   async getDocumentsByUser(ctx) {
     const { user } = ctx.state;
+
     // get all user documents
     const document = await strapi.entityService.findMany(
       "api::user-document.user-document",
