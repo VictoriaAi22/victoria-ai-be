@@ -44,7 +44,7 @@ module.exports = {
             populate: {
               coverLetter: {
                 populate: {
-                  section: true,
+                  sections: true,
                   previewImage: true,
                 },
               },
@@ -59,6 +59,8 @@ module.exports = {
         },
       }
     );
+
+    console.log(template);
     if (!template) {
       return ctx.throw(404, "Template not found");
     }
@@ -70,10 +72,15 @@ module.exports = {
         data: {
           users_permissions_user: user.id,
           title: company || "",
-          template: template.template,
+          template: {
+            coverLetter: template.template.coverLetter,
+            resume: template.template.resume,
+          },
         },
       }
     );
+
+    console.log("This is the document", create);
 
     ctx.send({
       status: true,
