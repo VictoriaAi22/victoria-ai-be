@@ -174,32 +174,6 @@ module.exports = {
     });
   },
 
-  // async updateDocument(ctx) {
-  //   const { id } = ctx.params;
-  //   const { user } = ctx.state;
-  //   const { body } = ctx.request;
-
-  //   // Check if the user is the owner of the document
-  //   const findUserDoc = await strapi.db
-  //     .query("api::user-document.user-document")
-  //     .findOne({
-  //       where: {
-  //         users_permissions_user: user.id,
-  //         id,
-  //       },
-  //     });
-
-  //   if (!findUserDoc) return ctx.throw(404, "document not found");
-
-  //   const docUpdate = await strapi.entityService.update(
-  //     "api::user-document.user-document",
-  //     id,
-  //     {
-  //       data: body,
-  //     }
-  //   );
-  // },
-
   async deleteDocument(ctx) {
     const { id } = ctx.params;
     const { user } = ctx.state;
