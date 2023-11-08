@@ -294,6 +294,7 @@ export interface TemplateComponentsResume extends Schema.Component {
   };
   attributes: {
     previewImage: Attribute.Media;
+    profilePicture: Attribute.Media;
     sections: Attribute.Component<'template-components.sections', true>;
   };
 }

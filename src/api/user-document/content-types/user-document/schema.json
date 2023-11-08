@@ -4,7 +4,8 @@
   "info": {
     "singularName": "user-document",
     "pluralName": "user-documents",
-    "displayName": "User Document"
+    "displayName": "User Document",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -16,8 +17,13 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
     },
-    "title": {
+    "companyName": {
       "type": "string"
+    },
+    "color": {
+      "type": "string",
+      "required": false,
+      "default": "#0000"
     },
     "template": {
       "type": "component",

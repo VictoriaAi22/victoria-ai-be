@@ -838,6 +838,7 @@ export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
     singularName: 'user-document';
     pluralName: 'user-documents';
     displayName: 'User Document';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -848,7 +849,8 @@ export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
-    title: Attribute.String;
+    companyName: Attribute.String;
+    color: Attribute.String & Attribute.DefaultTo<'#0000'>;
     template: Attribute.Component<'template-components.template'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
