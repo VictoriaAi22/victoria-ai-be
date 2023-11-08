@@ -850,6 +850,7 @@ export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
       'plugin::users-permissions.user'
     >;
     companyName: Attribute.String;
+    templateType: Attribute.String;
     color: Attribute.String & Attribute.DefaultTo<'#0000'>;
     template: Attribute.Component<'template-components.template'>;
     createdAt: Attribute.DateTime;

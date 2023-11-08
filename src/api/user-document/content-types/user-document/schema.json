@@ -20,6 +20,9 @@
     "companyName": {
       "type": "string"
     },
+    "templateType": {
+      "type": "string"
+    },
     "color": {
       "type": "string",
       "required": false,
