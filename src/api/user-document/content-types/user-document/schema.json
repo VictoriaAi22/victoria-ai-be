@@ -20,6 +20,14 @@
     "companyName": {
       "type": "string"
     },
+    "profilePicture": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
     "templateType": {
       "type": "string"
     },
@@ -32,6 +40,11 @@
       "type": "component",
       "component": "template-components.template",
       "repeatable": false
+    },
+    "addProfilePicture": {
+      "type": "boolean",
+      "default": false,
+      "required": false
     }
   }
 }

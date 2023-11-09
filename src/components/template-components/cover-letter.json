@@ -6,9 +6,10 @@
   "options": {},
   "attributes": {
     "previewImage": {
-      "allowedTypes": ["images", "files", "videos", "audios"],
+      "allowedTypes": ["images"],
       "type": "media",
-      "multiple": false
+      "multiple": false,
+      "required": true
     },
     "sections": {
       "displayName": "Sections",

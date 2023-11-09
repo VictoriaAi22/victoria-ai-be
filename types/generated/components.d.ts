@@ -271,7 +271,7 @@ export interface TemplateComponentsCoverLetter extends Schema.Component {
     displayName: 'Cover Letter';
   };
   attributes: {
-    previewImage: Attribute.Media;
+    previewImage: Attribute.Media & Attribute.Required;
     sections: Attribute.Component<'template-components.sections', true>;
   };
 }
@@ -293,8 +293,7 @@ export interface TemplateComponentsResume extends Schema.Component {
     description: '';
   };
   attributes: {
-    previewImage: Attribute.Media;
-    profilePicture: Attribute.Media;
+    previewImage: Attribute.Media & Attribute.Required;
     sections: Attribute.Component<'template-components.sections', true>;
   };
 }

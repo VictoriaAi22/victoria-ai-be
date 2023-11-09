@@ -9,13 +9,7 @@
     "previewImage": {
       "type": "media",
       "multiple": false,
-      "required": false,
-      "allowedTypes": ["images"]
-    },
-    "profilePicture": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
+      "required": true,
       "allowedTypes": ["images"]
     },
     "sections": {
