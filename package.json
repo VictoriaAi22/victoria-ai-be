@@ -22,6 +22,7 @@
     "@strapi/strapi": "4.13.7",
     "axios": "^1.5.1",
     "cheerio": "^1.0.0-rc.12",
+    "esbuild": "^0.19.5",
     "html-to-text": "^9.0.5",
     "langchain": "^0.0.185",
     "pdf-parse": "^1.1.1",
