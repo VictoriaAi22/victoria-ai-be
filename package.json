@@ -12,6 +12,7 @@
   "dependencies": {
     "@_sh/strapi-plugin-ckeditor": "^2.0.4",
     "@ckeditor/strapi-plugin-ckeditor": "^0.0.10",
+    "@pinecone-database/pinecone": "^1.1.1",
     "@strapi/plugin-color-picker": "^4.14.3",
     "@strapi/plugin-graphql": "^4.13.7",
     "@strapi/plugin-i18n": "4.13.7",
@@ -19,8 +20,14 @@
     "@strapi/provider-email-nodemailer": "^4.14.3",
     "@strapi/provider-upload-cloudinary": "^4.13.7",
     "@strapi/strapi": "4.13.7",
+    "axios": "^1.5.1",
+    "cheerio": "^1.0.0-rc.12",
+    "html-to-text": "^9.0.5",
+    "langchain": "^0.0.185",
+    "pdf-parse": "^1.1.1",
     "pg": "8.8.0",
-    "strapi-plugin-cloudflare-pages": "^0.5.0"
+    "strapi-plugin-cloudflare-pages": "^0.5.0",
+    "uuid": "^9.0.1"
   },
   "author": {
     "name": "A Strapi developer"
