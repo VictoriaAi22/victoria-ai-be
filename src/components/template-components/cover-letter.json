@@ -14,7 +14,7 @@
     "sections": {
       "displayName": "Sections",
       "type": "component",
-      "repeatable": true,
+      "repeatable": false,
       "component": "template-components.cover-letter-sections"
     }
   }

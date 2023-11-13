@@ -309,20 +309,7 @@ export interface TemplateComponentsCoverLetter extends Schema.Component {
   };
   attributes: {
     previewImage: Attribute.Media & Attribute.Required;
-    sections: Attribute.Component<
-      'template-components.cover-letter-sections',
-      true
-    >;
-  };
-}
-
-export interface TemplateComponentsCustomSections extends Schema.Component {
-  collectionName: 'components_template_components_custom_sections';
-  info: {
-    displayName: 'custom sections';
-  };
-  attributes: {
-    points: Attribute.Text;
+    sections: Attribute.Component<'template-components.cover-letter-sections'>;
   };
 }
 
@@ -332,7 +319,7 @@ export interface TemplateComponentsResumeContact extends Schema.Component {
     displayName: 'resume contact';
   };
   attributes: {
-    contact: Attribute.String &
+    phone: Attribute.String &
       Attribute.Required &
       Attribute.DefaultTo<'23787648'>;
     email: Attribute.String &
@@ -425,20 +412,6 @@ export interface TemplateComponentsResume extends Schema.Component {
   };
 }
 
-export interface TemplateComponentsSections extends Schema.Component {
-  collectionName: 'components_template_components_sections';
-  info: {
-    displayName: 'Template Sections';
-    description: '';
-  };
-  attributes: {
-    sectionTitle: Attribute.String;
-    heading: Attribute.String;
-    subheading: Attribute.String;
-    content: Attribute.RichText;
-  };
-}
-
 export interface TemplateComponentsTemplate extends Schema.Component {
   collectionName: 'components_template_components_template';
   info: {
@@ -474,12 +447,10 @@ declare module '@strapi/strapi' {
       'structural-components.testimonial': StructuralComponentsTestimonial;
       'template-components.cover-letter-sections': TemplateComponentsCoverLetterSections;
       'template-components.cover-letter': TemplateComponentsCoverLetter;
-      'template-components.custom-sections': TemplateComponentsCustomSections;
       'template-components.resume-contact': TemplateComponentsResumeContact;
       'template-components.resume-heading': TemplateComponentsResumeHeading;
       'template-components.resume-sections': TemplateComponentsResumeSections;
       'template-components.resume': TemplateComponentsResume;
-      'template-components.sections': TemplateComponentsSections;
       'template-components.template': TemplateComponentsTemplate;
     }
   }

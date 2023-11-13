@@ -5,7 +5,7 @@
   },
   "options": {},
   "attributes": {
-    "contact": {
+    "phone": {
       "type": "string",
       "required": true,
       "default": "23787648"

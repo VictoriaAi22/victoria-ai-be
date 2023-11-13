@@ -851,10 +851,11 @@ export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
     >;
     companyName: Attribute.String;
     profilePicture: Attribute.Media;
-    templateType: Attribute.String;
+    html: Attribute.String;
     color: Attribute.String & Attribute.DefaultTo<'#0000'>;
     template: Attribute.Component<'template-components.template'>;
     addProfilePicture: Attribute.Boolean & Attribute.DefaultTo<false>;
+    templateType: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

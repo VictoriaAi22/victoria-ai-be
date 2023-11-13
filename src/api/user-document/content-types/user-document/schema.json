@@ -24,11 +24,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
-    "templateType": {
+    "html": {
       "type": "string"
     },
     "color": {
@@ -45,6 +43,9 @@
       "type": "boolean",
       "default": false,
       "required": false
+    },
+    "templateType": {
+      "type": "string"
     }
   }
 }
