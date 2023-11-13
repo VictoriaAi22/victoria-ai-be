@@ -23,7 +23,7 @@
       ]
     },
     "greetings": {
-      "type": "string",
+      "type": "text",
       "default": "Dear (Hiring Manager Name)"
     },
     "opener": {
