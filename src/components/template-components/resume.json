@@ -13,9 +13,10 @@
       "allowedTypes": ["images"]
     },
     "sections": {
+      "displayName": "Sections",
       "type": "component",
-      "repeatable": true,
-      "component": "template-components.sections"
+      "repeatable": false,
+      "component": "template-components.resume-sections"
     }
   }
 }

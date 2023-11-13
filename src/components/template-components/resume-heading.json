@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_template_components_resume_heading",
+  "info": {
+    "displayName": "resume heading"
+  },
+  "options": {},
+  "attributes": {
+    "username": {
+      "type": "string",
+      "required": true,
+      "default": "[First name] [Last Name]"
+    },
+    "professionalTitle": {
+      "type": "string",
+      "default": "Professional Title"
+    },
+    "contact": {
+      "displayName": "Contact",
+      "type": "component",
+      "component": "template-components.resume-contact",
+      "repeatable": false
+    }
+  }
+}

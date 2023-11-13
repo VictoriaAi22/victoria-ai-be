@@ -1,0 +1,62 @@
+{
+  "collectionName": "components_template_components_resume_sections",
+  "info": {
+    "displayName": "resume sections"
+  },
+  "options": {},
+  "attributes": {
+    "heading": {
+      "displayName": "Heading",
+      "type": "component",
+      "repeatable": false,
+      "component": "template-components.resume-heading"
+    },
+    "professionalSummary": {
+      "type": "text",
+      "required": true
+    },
+    "skills": {
+      "type": "json",
+      "default": ["React", "NodeJs"]
+    },
+    "education": {
+      "type": "json",
+      "default": [
+        {
+          "school": "Udacity",
+          "startYear": "2017",
+          "endYear": "2020",
+          "courseOfStudy": "Full Stack Development",
+          "achievements": ["list achievements to be in bullet points"]
+        }
+      ]
+    },
+    "workExperience": {
+      "type": "json",
+      "default": [
+        {
+          "company": "Company Name",
+          "location": "Company Location",
+          "jobType": "Full Time, Contract or remote",
+          "startYear": "Start Year(ex.2017)",
+          "endYear": "End Year(ex. 2018)",
+          "achievements": ["list achievements to be in bullet points"]
+        }
+      ]
+    },
+
+    "reference": {
+      "type": "json",
+      "default": [
+        {
+          "name": "Referee Name ",
+          "contact": "Referee Contact"
+        }
+      ]
+    },
+    "otherSections": {
+      "type": "json",
+      "default": []
+    }
+  }
+}

@@ -854,6 +854,7 @@ export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
     templateType: Attribute.String;
     color: Attribute.String & Attribute.DefaultTo<'#0000'>;
     template: Attribute.Component<'template-components.template'>;
+    addProfilePicture: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

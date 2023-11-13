@@ -15,7 +15,7 @@
       "displayName": "Sections",
       "type": "component",
       "repeatable": true,
-      "component": "template-components.sections"
+      "component": "template-components.cover-letter-sections"
     }
   }
 }

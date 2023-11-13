@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_template_components_resume_contact",
+  "info": {
+    "displayName": "resume contact"
+  },
+  "options": {},
+  "attributes": {
+    "contact": {
+      "type": "string",
+      "required": true,
+      "default": "23787648"
+    },
+    "email": {
+      "type": "string",
+      "required": true,
+      "default": "user@email.com"
+    },
+    "socialLinks": {
+      "type": "json",
+      "default": [
+        {
+          "linkedIn": "https://linkedIn.com",
+          "github": "https://github.com",
+          "facebook": "https://facebook.com"
+        }
+      ]
+    }
+  }
+}

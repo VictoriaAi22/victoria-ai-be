@@ -265,6 +265,43 @@ export interface StructuralComponentsTestimonial extends Schema.Component {
   };
 }
 
+export interface TemplateComponentsCoverLetterSections
+  extends Schema.Component {
+  collectionName: 'components_template_components_cover_letter_sections';
+  info: {
+    displayName: 'Cover Letter Sections';
+  };
+  attributes: {
+    heading: Attribute.Component<'template-components.resume-heading'>;
+    address: Attribute.JSON &
+      Attribute.DefaultTo<
+        [
+          {
+            to: 'Hiring Person';
+            jobTitle: 'Job Title';
+            companyName: 'Company Name';
+            companyAddress: 'Company Address / Location Here';
+          }
+        ]
+      >;
+    greetings: Attribute.String &
+      Attribute.DefaultTo<'Dear (Hiring Manager Name)'>;
+    opener: Attribute.Text &
+      Attribute.DefaultTo<'I am writing to express my deep interest in the Account Executive position at Klaviyo. With my background as a Senior Specialist at Biosense Webster \u2013 Johnson & Johnson and my extensive experience in medical technical sales, I am confident that my skills, passion for tech sales, and ability to learn quickly make me an excellent fit for this role.'>;
+    body_1: Attribute.Text &
+      Attribute.DefaultTo<'While my educational background in biomedical engineering may not immediately seem relevant to a sales position in the technology industry, I strongly believe that my five-plus years in medical technical sales have provided me with the necessary foundation to excel in this role. I am a fast learner who thrives in commission-based environments, as I have experienced firsthand the intrinsic link between commission-based structures and job satisfaction.'>;
+    body_2: Attribute.Text &
+      Attribute.DefaultTo<'Throughout my career, I consistently exceeded sales plans, surpassing targets for five consecutive years. In the highly competitive US and Australian markets, I achieved sales plans by 110% or more for three consecutive years. I actively participated in the entire sales cycle, engaging with a diverse range of customers, including physicians, hospital administrators, and C-suite level employees. This broad exposure has sharpened my ability to understand customer needs, build strong relationships, and navigate complex sales environments.'>;
+    body_3: Attribute.Text &
+      Attribute.DefaultTo<"In addition to my sales achievements, I have a proven track record of performing under high-pressure circumstances, often dealing with life-or-death scenarios in the medical technology field. This experience has instilled in me a sense of resilience, adaptability, and unwavering focus. I am confident that I can bring the same energy and determination to Klaviyo's fast-paced and competitive work environment, contributing to the continued growth and success of the company.">;
+    conclusion: Attribute.Text &
+      Attribute.DefaultTo<'My unique combination of an engineering background, sales motivation, and ability to learn quickly positions me as an exceptional fit for technical sales. I possess the analytical mindset and problem-solving skills to comprehend complex technology solutions and effectively communicate their value to clients. Furthermore, my commitment to continuous learning ensures that I stay ahead in a rapidly evolving industry. I am genuinely passionate about tech sales and motivated to make a significant impact at Klaviyo. I am confident that my drive, skills, and experience make me an invaluable asset to your sales team.'>;
+    call_to_action: Attribute.Text &
+      Attribute.DefaultTo<"Thank you for considering my application. I have attached my resume for your review. I welcome the opportunity to discuss how my qualifications align with Klaviyo's vision and how I can contribute to the company's continued success.">;
+    signature: Attribute.Text & Attribute.DefaultTo<'Signature'>;
+  };
+}
+
 export interface TemplateComponentsCoverLetter extends Schema.Component {
   collectionName: 'components_template_components_cover_letters';
   info: {
@@ -272,7 +309,10 @@ export interface TemplateComponentsCoverLetter extends Schema.Component {
   };
   attributes: {
     previewImage: Attribute.Media & Attribute.Required;
-    sections: Attribute.Component<'template-components.sections', true>;
+    sections: Attribute.Component<
+      'template-components.cover-letter-sections',
+      true
+    >;
   };
 }
 
@@ -286,6 +326,93 @@ export interface TemplateComponentsCustomSections extends Schema.Component {
   };
 }
 
+export interface TemplateComponentsResumeContact extends Schema.Component {
+  collectionName: 'components_template_components_resume_contact';
+  info: {
+    displayName: 'resume contact';
+  };
+  attributes: {
+    contact: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'23787648'>;
+    email: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'user@email.com'>;
+    socialLinks: Attribute.JSON &
+      Attribute.DefaultTo<
+        [
+          {
+            linkedIn: 'https://linkedIn.com';
+            github: 'https://github.com';
+            facebook: 'https://facebook.com';
+          }
+        ]
+      >;
+  };
+}
+
+export interface TemplateComponentsResumeHeading extends Schema.Component {
+  collectionName: 'components_template_components_resume_heading';
+  info: {
+    displayName: 'resume heading';
+  };
+  attributes: {
+    username: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'[First name] [Last Name]'>;
+    professionalTitle: Attribute.String &
+      Attribute.DefaultTo<'Professional Title'>;
+    contact: Attribute.Component<'template-components.resume-contact'>;
+  };
+}
+
+export interface TemplateComponentsResumeSections extends Schema.Component {
+  collectionName: 'components_template_components_resume_sections';
+  info: {
+    displayName: 'resume sections';
+  };
+  attributes: {
+    heading: Attribute.Component<'template-components.resume-heading'>;
+    professionalSummary: Attribute.Text & Attribute.Required;
+    skills: Attribute.JSON & Attribute.DefaultTo<['React', 'NodeJs']>;
+    education: Attribute.JSON &
+      Attribute.DefaultTo<
+        [
+          {
+            school: 'Udacity';
+            startYear: '2017';
+            endYear: '2020';
+            courseOfStudy: 'Full Stack Development';
+            achievements: ['list achievements to be in bullet points'];
+          }
+        ]
+      >;
+    workExperience: Attribute.JSON &
+      Attribute.DefaultTo<
+        [
+          {
+            company: 'Company Name';
+            location: 'Company Location';
+            jobType: 'Full Time, Contract or remote';
+            startYear: 'Start Year(ex.2017)';
+            endYear: 'End Year(ex. 2018)';
+            achievements: ['list achievements to be in bullet points'];
+          }
+        ]
+      >;
+    reference: Attribute.JSON &
+      Attribute.DefaultTo<
+        [
+          {
+            name: 'Referee Name ';
+            contact: 'Referee Contact';
+          }
+        ]
+      >;
+    otherSections: Attribute.JSON & Attribute.DefaultTo<[]>;
+  };
+}
+
 export interface TemplateComponentsResume extends Schema.Component {
   collectionName: 'components_template_components_resumes';
   info: {
@@ -294,14 +421,14 @@ export interface TemplateComponentsResume extends Schema.Component {
   };
   attributes: {
     previewImage: Attribute.Media & Attribute.Required;
-    sections: Attribute.Component<'template-components.sections', true>;
+    sections: Attribute.Component<'template-components.resume-sections'>;
   };
 }
 
 export interface TemplateComponentsSections extends Schema.Component {
   collectionName: 'components_template_components_sections';
   info: {
-    displayName: 'Sections';
+    displayName: 'Template Sections';
     description: '';
   };
   attributes: {
@@ -345,8 +472,12 @@ declare module '@strapi/strapi' {
       'structural-components.faqs': StructuralComponentsFaqs;
       'structural-components.points': StructuralComponentsPoints;
       'structural-components.testimonial': StructuralComponentsTestimonial;
+      'template-components.cover-letter-sections': TemplateComponentsCoverLetterSections;
       'template-components.cover-letter': TemplateComponentsCoverLetter;
       'template-components.custom-sections': TemplateComponentsCustomSections;
+      'template-components.resume-contact': TemplateComponentsResumeContact;
+      'template-components.resume-heading': TemplateComponentsResumeHeading;
+      'template-components.resume-sections': TemplateComponentsResumeSections;
       'template-components.resume': TemplateComponentsResume;
       'template-components.sections': TemplateComponentsSections;
       'template-components.template': TemplateComponentsTemplate;
