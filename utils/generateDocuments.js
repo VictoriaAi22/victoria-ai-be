@@ -144,7 +144,8 @@ async function generateDocuments(req) {
         },
         {
           content: null,
-          username: `${fullname}, ${jobTitle}`,
+          username: fullname,
+          professionalTitle: jobTitle,
           email: email,
           phone: phone,
           sectionTitle: "heading",
