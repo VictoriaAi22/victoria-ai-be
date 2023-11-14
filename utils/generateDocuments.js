@@ -22,7 +22,7 @@ async function generateDocuments(req) {
   const company_url = body?.company_url;
   const job_listing_url = body?.job_listing_url;
   const document_url = body?.document_url;
-
+  let jobTitle = "[ Job Title Applying To]";
   try {
     /*----------scrape company_url------------*/
 
@@ -87,47 +87,16 @@ async function generateDocuments(req) {
       const loader = new WebPDFLoader(blob);
       const docs = await loader.load();
       documents.push(docs);
-      //console.log("resume docs are ", docs);
     }
-
-    // const contact = await getFormatedResponse(
-    //   "Extract about  contact section for a cover letter from this document",
-    //   documents[0],
-    //   contactSchema
-    // );
-    // const about = await getFormatedResponse(
-    //   "Extract about section for a cover letter from this document",
-    //   documents[0],
-    //   aboutSchema
-    // );
-    // const education = await getFormatedResponse(
-    //   "Extract about  education section for a cover letter from this document",
-    //   documents[0],
-    //   educationSchema
-    // );
-    // const skills = await getFormatedResponse(
-    //   "Extract about  skills section for a cover letter from this document",
-    //   documents[0],
-    //   skillSchema
-    // );
-    // const experience = await getFormatedResponse(
-    //   "Extract about  experience section for a cover letter from this document",
-    //   documents[0],
-    //   experienceSchema
-    // );
-
-    // const conclusion = await getFormatedResponse(
-    //   "Extract about  conclusion section for a cover letter from this document",
-    //   documents[0],
-    //   conclusionSchema
-    // );
 
     const {
       greeting,
       opener,
       body1,
       body2,
-      contact,
+      fullname,
+      email,
+      phone,
       conclusion,
       call_to_action,
     } = await forCoverLetter(documents);
@@ -175,9 +144,11 @@ async function generateDocuments(req) {
         },
         {
           content: null,
-          heading: "[First & Last Name], [ Job Title Applying To]",
-          sectionTitle: "Header / Contact Info",
-          subheading: "[phone number] — [email]",
+          username: `${fullname}, ${jobTitle}`,
+          email: email,
+          phone: phone,
+          sectionTitle: "heading",
+          subheading: "",
         },
         {
           content: greeting,
@@ -275,7 +246,9 @@ async function forCoverLetter(documents) {
     `generate a Opener section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
     `generate a body paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
     `generate a middle paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
-    `Extract contact section from this document. give name , phone and email in a json format. Don't use \n as line breaker. dont say i dont now.`,
+    `Extract my full name from this document. dont say i dont now.`,
+    `Extract my email from this document. dont say i dont now.`,
+    `Extract my phone number from this document. dont say i dont now.`,
     `generate a conclusion section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
     `generate a call to action section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
   ];
@@ -297,9 +270,11 @@ async function forCoverLetter(documents) {
     opener: results[1],
     body1: results[2],
     body2: results[3],
-    contact: results[4],
-    conclusion: results[5],
-    call_to_action: results[6],
+    fullname: results[4],
+    email: results[5],
+    phone: results[6],
+    conclusion: results[7],
+    call_to_action: results[8],
   };
 }
 
