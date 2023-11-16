@@ -13,12 +13,10 @@ const queryOpenAiToRefineResume = async (question, docs) => {
     input_documents: docs,
     question: question,
     options: {
-      max_tokens: 4000,
+      max_tokens: 10000,
     },
   });
-  // 10. Log the answer
-  // console.log("result is ", result);
-  // console.log(`Answer: ${result.text}`);
+
   return result.text;
 };
 

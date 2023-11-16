@@ -284,7 +284,7 @@ export interface TemplateComponentsCoverLetterSections
           }
         ]
       >;
-    greetings: Attribute.String &
+    greetings: Attribute.Text &
       Attribute.DefaultTo<'Dear (Hiring Manager Name)'>;
     opener: Attribute.Text &
       Attribute.DefaultTo<'I am writing to express my deep interest in the Account Executive position at Klaviyo. With my background as a Senior Specialist at Biosense Webster \u2013 Johnson & Johnson and my extensive experience in medical technical sales, I am confident that my skills, passion for tech sales, and ability to learn quickly make me an excellent fit for this role.'>;

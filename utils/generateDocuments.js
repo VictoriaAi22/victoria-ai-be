@@ -22,7 +22,7 @@ async function generateDocuments(req) {
   const company_url = body?.company_url;
   const job_listing_url = body?.job_listing_url;
   const document_url = body?.document_url;
-  let jobTitle = "[ Job Title Applying To]";
+  let professionalTitle = "[ Job Title Applying To]";
   try {
     /*----------scrape company_url------------*/
 
@@ -71,7 +71,7 @@ async function generateDocuments(req) {
 
     /*----------load resumes------------*/
 
-    // const fileUrl =
+    // let document_url =
     //   "https://drive.google.com/uc?export=download&id=17plAwqxhHNX2wI2JHkFMfTvcy2-MYpRC";
 
     console.log("document_url is ", document_url);
@@ -100,6 +100,8 @@ async function generateDocuments(req) {
       conclusion,
       call_to_action,
     } = await forCoverLetter(documents);
+
+    const resume = await forResume(documents);
 
     // console.log({ bio, middle, bottom });
     //await createPineconeIndex(indexName);
@@ -145,7 +147,7 @@ async function generateDocuments(req) {
         {
           content: null,
           username: fullname,
-          professionalTitle: jobTitle,
+          professionalTitle: professionalTitle,
           email: email,
           phone: phone,
           sectionTitle: "heading",
@@ -200,6 +202,23 @@ async function generateDocuments(req) {
           subheading: "",
         },
       ],
+      resume: {
+        heading: {
+          username: fullname,
+          professionalTitle,
+          contact: {
+            email: email,
+            phone: phone,
+            socialLinks: resume.socialLinks,
+          },
+        },
+        education: resume.education,
+        workExperience: resume.workExperience,
+        skills: resume.skills,
+        reference: resume.reference,
+        professionalSummary: resume.professionalSummary,
+        otherSections: {},
+      },
     };
     console.log(" data is ", data);
     return data;
@@ -226,18 +245,6 @@ function validateURL(url) {
   } catch (error) {
     console.log(`error validating the ${url} `);
     return false;
-  }
-}
-
-function parseJson(input) {
-  try {
-    if (input instanceof Object) {
-      return input;
-    }
-    return JSON.parse(input);
-  } catch (error) {
-    console.log("error occured for this ", input);
-    return {};
   }
 }
 
@@ -278,41 +285,144 @@ async function forCoverLetter(documents) {
     call_to_action: results[8],
   };
 }
+function parseJson(input, type) {
+  try {
+    const parsedData = JSON.parse(input);
+    if (Object.keys(parsedData[type]).length == 0) return schema[type];
+    return parsedData[type];
+  } catch (error) {
+    console.log("error occured for this ", input);
+    return schema[type];
+  }
+}
+// async function forResume(documents) {
+//   const education = await queryOpenAiToRefineResume(
+//     `Extract   education section in exaclty this format "{"education":{"0":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"},"1":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"}}}". include max 3. it should be a valid stringified json . if you dont know just give me the same format with empty strings. don't say i dont know.`,
+//     documents[0]
+//   );
+//   const skills = await queryOpenAiToRefineResume(
+//     `Extract   skill section in exaclty this format  "{"skills":{"0":"React","1":"NodeJs"}}" . it should be a valid stringified json . if you dont know just give me the same format with empty strings. don't say i dont know.`,
+//     documents[0]
+//   );
+//   const experience = await queryOpenAiToRefineResume(
+//     `Extract   work experience section in exaclty this format "{"workExperience":{"0":{"company":"Company Name","endYear":"End Year(ex. 2018)","jobType":"Full Time, Contract or remote","location":"Company Location","startYear":"Start Year(ex.2017)","achievements":{"0":"list achievements to be in bullet points"}}}}". include max 3. it should be a valid stringified json . if you dont know just give me the same format with empty strings. don't say i dont know.`,
+//     documents[0]
+//   );
+//   const reference = await queryOpenAiToRefineResume(
+//     `Extract reference detail in exaclty this format  "{"reference":{"0":{"name":"Referee Name ","contact":"Referee Contact"}}}" . if there is no reference, dont include my information. it should be a valid stringified json . if you dont know just give me the same format with empty strings. don't say i dont know.`,
+//     documents[0]
+//   );
+//   const e = parseJson(education, "education");
+//   const f = parseJson(experience, "workExperience");
+//   const g = parseJson(skills, "skills");
+//   const h = parseJson(reference, "reference");
+//   return {
+//     education: e,
+//     workExperience: f,
+//     skills: g,
+//     reference: h,
+//   };
+// }
 
 async function forResume(documents) {
-  const about = await queryOpenAiToRefineResume(
-    `Extract   about section from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
-    documents[0]
-  );
-  const education = await queryOpenAiToRefineResume(
-    `Extract   education section in bullets with course name and course duration from this document. Don't include my name or I. Don't use \n as line breaker. dont say i dont now.`,
-    documents[0]
-  );
-  const skills = await queryOpenAiToRefineResume(
-    `Extract   skill section from this document. each skill should be separated by | Don't use \n as line breaker. dont say i dont now.`,
-    documents[0]
-  );
-  const experience = await queryOpenAiToRefineResume(
-    `Extract   work experience section in bullets with job name and course duration from this document. Don't include my name or I.  Don't use \n as line breaker. dont say i dont now.`,
-    documents[0]
-  );
-  const contact = await queryOpenAiToRefineResume(
-    `Extract contact section from this document. give name , phone and email in a json format. Don't use \n as line breaker. dont say i dont now.`,
-    documents[0]
-  );
-  const conclusion = await queryOpenAiToRefineResume(
-    `Extract   conclusion section from this document. Dont use name , use I. Don't use \n as line breaker. dont say i dont now.`,
-    documents[0]
+  const queries = [
+    {
+      label: "education",
+      prompt: `Extract education section in exactly this format "{"education":{"0":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"},"1":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"}}}" include max 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know."`,
+    },
+    {
+      label: "skills",
+      prompt: `Extract skill section in exactly this format "{"skills":{"0":"React","1":"NodeJs"}}" . it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
+    },
+    {
+      label: "workExperience",
+      prompt: `Extract work experience section in exactly this format "{"workExperience":{"0":{"company":"Company Name","endYear":"End Year(ex. 2018)","jobType":"Full Time, Contract or remote","location":"Company Location","startYear":"Start Year(ex.2017)","achievements":{"0":"list achievements to be in bullet points"}}}}". include max 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
+    },
+    {
+      label: "reference",
+      prompt: `Extract reference detail in exactly this format "{"reference":{"0":{"name":"Referee Name ","contact":"Referee Contact"}}}" . if there is no reference, don't include my information. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
+    },
+    {
+      label: "socialLinks",
+      prompt: `Extract my socialLinks detail in exactly this format "{"socialLinks":{"0":{"github":"https://github.com","facebook":"https://facebook.com","linkedIn":"https://linkedIn.com"}}}" . if there is no reference, don't include my information. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
+    },
+    {
+      label: "professionalSummary",
+      prompt: `Extract my professionalSummary from this document in 130 words. don't use my name. use I . don't say i don't know.`,
+    },
+  ];
+
+  // Use Promise.all to run all queries in parallel
+  const results = await Promise.all(
+    queries.map(async ({ label, prompt }) => {
+      const response = await queryOpenAiToRefineResume(prompt, documents[0]);
+      if (label == "professionalSummary") return response;
+      return parseJson(response, label);
+    })
   );
 
-  return {
-    contact,
+  // Destructure the results array
+  const [
     education,
-    experience,
     skills,
-    conclusion,
-    about,
+    workExperience,
+    reference,
+    socialLinks,
+    professionalSummary,
+  ] = results;
+
+  return {
+    education,
+    workExperience,
+    skills,
+    reference,
+    professionalSummary,
+    socialLinks,
   };
 }
 
 module.exports = { generateDocuments };
+
+const schema = {
+  education: {
+    0: {
+      school: "your school",
+      endYear: "end date",
+      startYear: "start date",
+      achievements: {
+        0: "list achievements to be in bullet points",
+      },
+      courseOfStudy: " course title",
+    },
+  },
+  workExperience: {
+    0: {
+      company: "Company Name",
+      endYear: "End Year(ex. 2018)",
+      jobType: "Full Time, Contract or remote",
+      location: "Company Location",
+      startYear: "Start Year(ex.2017)",
+      achievements: {
+        0: "list achievements to be in bullet points",
+      },
+    },
+  },
+  otherSections: {},
+  skills: {
+    0: " your skill",
+  },
+  reference: {
+    0: {
+      name: "Referee Name ",
+      contact: "Referee Contact",
+    },
+  },
+  socialLinks: {
+    0: {
+      github: "https://github.com",
+      facebook: "https://facebook.com",
+      linkedIn: "https://linkedIn.com",
+    },
+  },
+  professionalSummary: "",
+};
