@@ -16,6 +16,8 @@ const { webCrawl } = require("./crawler.js");
 
 async function generateDocuments(req) {
   const documents = [];
+  const company_page = [];
+  const job_page = [];
   const indexName = "my-index-123";
   const body = req;
 
@@ -50,24 +52,47 @@ async function generateDocuments(req) {
 
     // /*----------scrape job_listing_url------------*/
 
-    // if (validateURL(job_listing_url)) {
-    //   try {
-    //     const limit = 1;
-    //     const jobDetail = await webCrawl(
-    //       validateURL(job_listing_url) as string,
-    //       limit
-    //     );
+    if (validateURL(job_listing_url)) {
+      try {
+        const limit = 1;
+        const jobDetail = await webCrawl(validateURL(job_listing_url), 2000);
 
-    //     const jsonString = JSON.stringify(jobDetail);
-    //     const blob = new Blob([jsonString], { type: "application/json" });
-    //     const loader = new JSONLoader(blob);
-    //     const docs = await loader.load();
-    //     documents.push(docs);
-    //     console.log("------------- jobDetail docs are ----------------- ", docs);
-    //   } catch (error) {
-    //     console.log("error occured while sraping job_listing_url", error);
-    //   }
-    // }
+        if (jobDetail?.error) {
+          return jobDetail;
+        }
+
+        const jsonString = JSON.stringify(jobDetail);
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const loader = new JSONLoader(blob);
+        const docs = await loader.load();
+        // job_page.push(docs);
+        const query =
+          "extract the job title from this document.extract only the job title, no extra word.i am apply for this job.if you dont know say i dont know.";
+        const title = await queryOpenAiToRefineResume(query, docs);
+        console.log("title is ", title);
+
+        // Array of phrases to check
+        var phrasesToCheck = ["i dont know", "i don't know"];
+
+        // Check if any phrase is present in the sentence
+        const found_title = phrasesToCheck.some((phrase) =>
+          title?.toLowerCase()?.includes(phrase)
+        );
+        if (found_title) {
+          return {
+            error: true,
+            message: "failed to scrape",
+          };
+        }
+        professionalTitle = title;
+      } catch (error) {
+        console.log("error occured while sraping job_listing_url", error);
+        return {
+          error: true,
+          message: "failed to scrape",
+        };
+      }
+    }
 
     /*----------load resumes------------*/
 
