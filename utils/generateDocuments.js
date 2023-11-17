@@ -25,6 +25,11 @@ async function generateDocuments(req) {
   const job_listing_url = body?.job_listing_url;
   const document_url = body?.document_url;
   let professionalTitle = "[ Job Title Applying To]";
+
+  if (body?.jobtitle) {
+    professionalTitle = body.jobtitle;
+  }
+
   try {
     /*----------scrape company_url------------*/
 
@@ -52,10 +57,10 @@ async function generateDocuments(req) {
 
     // /*----------scrape job_listing_url------------*/
 
-    if (validateURL(job_listing_url)) {
+    if (!body?.jobtitle && validateURL(job_listing_url)) {
       try {
         const limit = 1;
-        const jobDetail = await webCrawl(validateURL(job_listing_url), 2000);
+        const jobDetail = await webCrawl(validateURL(job_listing_url), 1000);
 
         if (jobDetail?.error) {
           return jobDetail;
