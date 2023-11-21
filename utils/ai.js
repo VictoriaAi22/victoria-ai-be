@@ -6,7 +6,7 @@ const { Document } = require("langchain/document");
 const { Pinecone } = require("@pinecone-database/pinecone");
 
 const queryOpenAiToRefineResume = async (question, docs) => {
-  const llm = new OpenAI({ temperature: 1 });
+  const llm = new OpenAI({ modelName: "gpt-4", temperature: 1 });
   const chain = loadQAStuffChain(llm);
 
   const result = await chain.call({

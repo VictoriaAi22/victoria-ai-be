@@ -25,6 +25,28 @@ async function generateDocuments(req) {
   const job_listing_url = body?.job_listing_url;
   const document_url = body?.document_url;
   let professionalTitle = "[ Job Title Applying To]";
+  let jobtitle = body?.jobtitle;
+  let job_description = body?.job_description;
+  let user_input = body?.notes;
+
+  let option;
+  if (body?.option == 1) {
+    option = `Relate experience from my resume for the job position I am applying to. Chose skills or traits the employer is requiring to 
+    demonstrate I meet and exceed the requirements. Ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance
+    `;
+  }
+  if (body?.option == 2) {
+    option = `Acknowledge that I am entering the work force after finishing my degree but my previous job experience applies to the skills 
+    and requirements used at this job. ensure the inclusion of relevant keywords, when 
+    appropriate, for optimal ATS system performance
+    `;
+  }
+  if (body?.option == 3) {
+    option = `Acknowledge that I am changing career fields but my previous job experience applies to the skills and requirements used 
+    at this job. ensure the inclusion of relevant keywords, when appropriate, for optimal 
+    ATS system performance
+     `;
+  }
 
   if (body?.jobtitle) {
     professionalTitle = body.jobtitle;
@@ -72,7 +94,7 @@ async function generateDocuments(req) {
         const docs = await loader.load();
         // job_page.push(docs);
         const query =
-          "extract the job title from this document.extract only the job title, no extra word.i am apply for this job.if you dont know say i dont know.";
+          "extract the job title from this document.extract only the job title. dont add any additional words.i am apply for this job.if you dont know say i dont know.";
         const title = await queryOpenAiToRefineResume(query, docs);
         console.log("title is ", title);
 
@@ -129,7 +151,7 @@ async function generateDocuments(req) {
       phone,
       conclusion,
       call_to_action,
-    } = await forCoverLetter(documents);
+    } = await forCoverLetter(documents, user_input, option);
 
     const resume = await forResume(documents);
 
@@ -278,16 +300,16 @@ function validateURL(url) {
   }
 }
 
-async function forCoverLetter(documents) {
+async function forCoverLetter(documents, user_input, option) {
   const queries = [
-    `generate a greeting section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
-    `generate a Opener section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
-    `generate a body paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
-    `generate a middle paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
-    `Extract my full name from this document. dont say i dont now.`,
-    `Extract my email from this document. dont say i dont now.`,
-    `Extract my phone number from this document. dont say i dont now.`,
-    `generate a conclusion section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
+    `generate a greeting section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now. dont include greeting or salutions at the start or end becuase this section will be followed by other sections`,
+    `generate a Opener section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.dont include greeting or salutions at the start or end becuase this section will be followed by other sections. dont introduce me again as introduction is already done.`,
+    `generate a body paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.${option}`,
+    `generate a middle paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont know. Demonstrate an understanding in the company's mission and culture.  Relate experiences or skills from my resume for key words used in the job position requirements. ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance.`,
+    `Extract my full name from this document.dont add any additional words. dont say i dont now.`,
+    `Extract my email from this document.dont add any additional words. dont say i dont now.`,
+    `Extract my phone number from this document.dont add any additional words. dont say i dont now.`,
+    `generate a conclusion section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont know. Conclude with a succinct summary of my strengths from my resume and show interest in the company. ${user_input}`,
     `generate a call to action section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
   ];
 
@@ -358,15 +380,17 @@ async function forResume(documents) {
   const queries = [
     {
       label: "education",
-      prompt: `Extract education section in exactly this format "{"education":{"0":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"},"1":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"}}}" include max 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know."`,
+      prompt: `Extract education section in exactly this format "{"education":{"0":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"},"1":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"}}}" . include maximum 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know."`,
     },
     {
       label: "skills",
-      prompt: `Extract skill section in exactly this format "{"skills":{"0":"React","1":"NodeJs"}}" . it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
+      prompt: `Extract skill section in exactly this format "{"skills":{"0":"React","1":"NodeJs"}}" . it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know. Refine my skills from my resume to emphasize relevant 12 skills for the job without fabricating any skills. Keep skills as simple bullet points. Keep all changes minor and subtle. ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance.`,
     },
     {
       label: "workExperience",
-      prompt: `Extract work experience section in exactly this format "{"workExperience":{"0":{"company":"Company Name","endYear":"End Year(ex. 2018)","jobType":"Full Time, Contract or remote","location":"Company Location","startYear":"Start Year(ex.2017)","achievements":{"0":"list achievements to be in bullet points"}}}}". include max 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
+      prompt: `Extract work experience section in exactly this format "{"workExperience":{"0":{"company":"Company Name","endYear":"End Year(ex. 2018)","jobType":"Full Time, Contract or remote","location":"Company Location","startYear":"Start Year(ex.2017)","achievements":{"0":"list achievements to be in bullet points"}}}}". include max 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know. Refine my previous work experience from my resume to emphasize relevant experience and skills for the job without fabricating anything. Do not fabricate any of my qualifications, experiences, or responsibilities. Keep all changes minor and subtle. State 3-4 bullet points for each job experience. ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance. Do not fabricate any 
+      responsibilities or experience
+      `,
     },
     {
       label: "reference",
@@ -378,7 +402,14 @@ async function forResume(documents) {
     },
     {
       label: "professionalSummary",
-      prompt: `Extract my professionalSummary from this document in 130 words. don't use my name. use I . don't say i don't know.`,
+      prompt: `Extract my professionalSummary from this document in 130 words. don't use my name. use I . don't say i don't know. Write professional summary in a brief 
+      paragraph form. In my professional summary include: How many years of experience I 
+      have, my specialty or area where you have the most experience, my soft or hard skills 
+      that are relevant to the position, any achievements I've accomplished that brought 
+      in results, my Professional career goals, and keywords used in the job posting. Avoid 
+      directly mentioning the company's name and ensure the inclusion of relevant keywords, 
+      when appropriate, for optimal ATS system performance.
+      `,
     },
   ];
 
