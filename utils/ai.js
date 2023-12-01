@@ -10,7 +10,7 @@ const queryOpenAiToRefineResume = async (
   docs,
   modelName = "gpt-4"
 ) => {
-  const llm = new OpenAI({ modelName, temperature: 1 });
+  const llm = new OpenAI({ modelName, temperature: 0.4 });
 
   const chain = loadQAStuffChain(llm);
 

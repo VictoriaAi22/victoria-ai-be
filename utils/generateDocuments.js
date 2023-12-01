@@ -13,6 +13,7 @@ const {
 } = require("./ai.js");
 // const { v4 as uuidv4 }=require("uuid");
 const { webCrawl } = require("./crawler.js");
+const convertHtmlToJson = require("./convertHtmlToJson.js");
 
 async function generateDocuments(req) {
   const documents = [];
@@ -94,7 +95,7 @@ async function generateDocuments(req) {
         const docs = await loader.load();
         // job_page.push(docs);
         const query =
-          "extract the job title from this document.extract only the job title. dont add any additional words.i am apply for this job.if you dont know say i dont know.";
+          "extract the exact job title from this document. don't add any additional phrase or words.Dont say title is [title] or title in document is [title]. i need just [title]. i am apply for this job.if you dont know say i dont know.";
         const title = await queryOpenAiToRefineResume(query, docs);
         console.log("title is ", title);
 
@@ -141,20 +142,19 @@ async function generateDocuments(req) {
       documents.push(docs);
     }
 
-    const {
-      greeting,
-      opener,
-      body1,
-      body2,
-      fullname,
-      email,
-      phone,
-      conclusion,
-      call_to_action,
-    } = await forCoverLetter(documents, user_input, option);
+    const coverletter = await forCoverLetter(
+      documents,
+      user_input,
+      option,
+      professionalTitle,
+      job_description
+    );
 
-    const resume = await forResume(documents);
-
+    const resume = await forResume(documents, job_description);
+    console.log(" coverletter is ", coverletter);
+    console.log(" resume is ", resume);
+    const formatedCoverletter = convertHtmlToJson(coverletter);
+    const formatedResume = convertHtmlToJson(resume);
     // console.log({ bio, middle, bottom });
     //await createPineconeIndex(indexName);
     // for (const docs of documents) {
@@ -191,88 +191,16 @@ async function generateDocuments(req) {
       status: 200,
       coverletter: [
         {
-          content: null,
-          heading: "Dear Hiring Manage",
-          sectionTitle: "Sub Header",
-          subheading: "[company name]",
+          sectionTitle: "Job Title",
+          sectionDescription: [professionalTitle],
+          bullets: [],
+          subSections: [],
         },
-        {
-          content: null,
-          username: fullname,
-          professionalTitle: professionalTitle,
-          email: email,
-          phone: phone,
-          sectionTitle: "heading",
-          subheading: "",
-        },
-        {
-          content: greeting,
-          heading: "",
-          sectionTitle: "Greetings",
-          subheading: "",
-        },
-        {
-          content: opener,
-          heading: "",
-          sectionTitle: "Opener",
-          subheading: "",
-        },
-        {
-          content: body1,
-          heading: "",
-          sectionTitle: "Body 1",
-          subheading: "",
-        },
-        {
-          content: body2,
-          heading: "",
-          sectionTitle: "Body 2",
-          subheading: "",
-        },
-        // {
-        //   content: contact,
-        //   heading: "",
-        //   sectionTitle: "",
-        //   subheading: "",
-        // },
-        {
-          content: conclusion,
-          heading: "",
-          sectionTitle: "Conclusion",
-          subheading: "",
-        },
-        {
-          content: call_to_action,
-          heading: "",
-          sectionTitle: "Call to Action",
-          subheading: "",
-        },
-        {
-          content: null,
-          heading: "",
-          sectionTitle: "Signature",
-          subheading: "",
-        },
+        ...formatedCoverletter,
       ],
-      resume: {
-        heading: {
-          username: fullname,
-          professionalTitle,
-          contact: {
-            email: email,
-            phone: phone,
-            socialLinks: resume.socialLinks,
-          },
-        },
-        education: resume.education,
-        workExperience: resume.workExperience,
-        skills: resume.skills,
-        reference: resume.reference,
-        professionalSummary: resume.professionalSummary,
-        otherSections: {},
-      },
+      resume: formatedResume,
     };
-    console.log(" data is ", data);
+
     return data;
   } catch (err) {
     console.log("error: ", err);
@@ -283,7 +211,7 @@ async function generateDocuments(req) {
 function validateURL(url) {
   try {
     const parsedURL = new URL(url);
-    console.log("parsed url is ", parsedURL);
+    //console.log("parsed url is ", parsedURL);
     // Check if the URL has a valid domain (hostname)
     if (!parsedURL.hostname) {
       return false;
@@ -300,42 +228,38 @@ function validateURL(url) {
   }
 }
 
-async function forCoverLetter(documents, user_input, option) {
-  const queries = [
-    `generate a greeting section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now. dont include greeting or salutions at the start or end becuase this section will be followed by other sections`,
-    `generate a Opener section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.dont include greeting or salutions at the start or end becuase this section will be followed by other sections. dont introduce me again as introduction is already done.`,
-    `generate a body paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.${option}`,
-    `generate a middle paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont know. Demonstrate an understanding in the company's mission and culture.  Relate experiences or skills from my resume for key words used in the job position requirements. ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance.`,
-    `Extract my full name from this document.dont add any additional words. dont say i dont now.`,
-    `Extract my email from this document.dont add any additional words. dont say i dont now.`,
-    `Extract my phone number from this document.dont add any additional words. dont say i dont now.`,
-    `generate a conclusion section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont know. Conclude with a succinct summary of my strengths from my resume and show interest in the company. ${user_input}`,
-    `generate a call to action section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
-  ];
+async function forCoverLetter(
+  documents,
+  user_input,
+  option,
+  professionalTitle,
+  job_description
+) {
+  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, and a call to action.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at [company name]. ${option} . ${
+    user_input && "Also mention that " + user_input
+  } .${
+    job_description &&
+    "Here is the job description, i am applying. " + job_description
+  }
+  
+  ouptput must be exactely in this format
+  'Wrap the output in a <body>[whole_output]</body>.
+  Each section must be wrapped inside <section>[section]</section>.
+  Each section  title must be wrapped inside <h1>[section_title]</h1>.
+ If there is any subheading then subheading must be written inside  <h2>[subheadings]</h2>. 
+ If there is any paragraph then paragraph must be written inside  <p>[paragraph]</p>.
+ If there is any bullet then  bullet must be written inside  <li>/[bullet]</li>. '
+  
+  Use my details from my resume.
+  `;
 
-  const promises = queries.map(async (query) => {
-    try {
-      return await queryOpenAiToRefineResume(query, documents[0]);
-    } catch (error) {
-      // Handle the error here, you can log it or take other actions.
-      console.error(`Error in promise: ${error}`);
-      return ""; // Return a placeholder value
-    }
-  });
-
-  const results = await Promise.all(promises);
-
-  return {
-    greeting: results[0],
-    opener: results[1],
-    body1: results[2],
-    body2: results[3],
-    fullname: results[4],
-    email: results[5],
-    phone: results[6],
-    conclusion: results[7],
-    call_to_action: results[8],
-  };
+  try {
+    return await queryOpenAiToRefineResume(prompt, documents[0]);
+  } catch (error) {
+    // Handle the error here, you can log it or take other actions.
+    console.error(`Error in promise: ${error}`);
+    return ""; // Return a placeholder value
+  }
 }
 function parseJson(input, type) {
   try {
@@ -347,99 +271,65 @@ function parseJson(input, type) {
     return schema[type];
   }
 }
-// async function forResume(documents) {
-//   const education = await queryOpenAiToRefineResume(
-//     `Extract   education section in exaclty this format "{"education":{"0":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"},"1":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"}}}". include max 3. it should be a valid stringified json . if you dont know just give me the same format with empty strings. don't say i dont know.`,
-//     documents[0]
-//   );
-//   const skills = await queryOpenAiToRefineResume(
-//     `Extract   skill section in exaclty this format  "{"skills":{"0":"React","1":"NodeJs"}}" . it should be a valid stringified json . if you dont know just give me the same format with empty strings. don't say i dont know.`,
-//     documents[0]
-//   );
-//   const experience = await queryOpenAiToRefineResume(
-//     `Extract   work experience section in exaclty this format "{"workExperience":{"0":{"company":"Company Name","endYear":"End Year(ex. 2018)","jobType":"Full Time, Contract or remote","location":"Company Location","startYear":"Start Year(ex.2017)","achievements":{"0":"list achievements to be in bullet points"}}}}". include max 3. it should be a valid stringified json . if you dont know just give me the same format with empty strings. don't say i dont know.`,
-//     documents[0]
-//   );
-//   const reference = await queryOpenAiToRefineResume(
-//     `Extract reference detail in exaclty this format  "{"reference":{"0":{"name":"Referee Name ","contact":"Referee Contact"}}}" . if there is no reference, dont include my information. it should be a valid stringified json . if you dont know just give me the same format with empty strings. don't say i dont know.`,
-//     documents[0]
-//   );
-//   const e = parseJson(education, "education");
-//   const f = parseJson(experience, "workExperience");
-//   const g = parseJson(skills, "skills");
-//   const h = parseJson(reference, "reference");
-//   return {
-//     education: e,
-//     workExperience: f,
-//     skills: g,
-//     reference: h,
-//   };
-// }
 
-async function forResume(documents) {
-  const queries = [
-    {
-      label: "education",
-      prompt: `Extract education section in exactly this format "{"education":{"0":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"},"1":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"}}}" . include maximum 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know."`,
-    },
-    {
-      label: "skills",
-      prompt: `Extract skill section in exactly this format "{"skills":{"0":"React","1":"NodeJs"}}" . it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know. Refine my skills from my resume to emphasize relevant 12 skills for the job without fabricating any skills. Keep skills as simple bullet points. Keep all changes minor and subtle. ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance.`,
-    },
-    {
-      label: "workExperience",
-      prompt: `Extract work experience section in exactly this format "{"workExperience":{"0":{"company":"Company Name","endYear":"End Year(ex. 2018)","jobType":"Full Time, Contract or remote","location":"Company Location","startYear":"Start Year(ex.2017)","achievements":{"0":"list achievements to be in bullet points"}}}}". include max 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know. Refine my previous work experience from my resume to emphasize relevant experience and skills for the job without fabricating anything. Do not fabricate any of my qualifications, experiences, or responsibilities. Keep all changes minor and subtle. State 3-4 bullet points for each job experience. ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance. Do not fabricate any 
-      responsibilities or experience
-      `,
-    },
-    {
-      label: "reference",
-      prompt: `Extract reference detail in exactly this format "{"reference":{"0":{"name":"Referee Name ","contact":"Referee Contact"}}}" . if there is no reference, don't include my information. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
-    },
-    {
-      label: "socialLinks",
-      prompt: `Extract my socialLinks detail in exactly this format "{"socialLinks":{"0":{"github":"https://github.com","facebook":"https://facebook.com","linkedIn":"https://linkedIn.com"}}}" . if there is no reference, don't include my information. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
-    },
-    {
-      label: "professionalSummary",
-      prompt: `Extract my professionalSummary from this document in 130 words. don't use my name. use I . don't say i don't know. Write professional summary in a brief 
-      paragraph form. In my professional summary include: How many years of experience I 
-      have, my specialty or area where you have the most experience, my soft or hard skills 
-      that are relevant to the position, any achievements I've accomplished that brought 
-      in results, my Professional career goals, and keywords used in the job posting. Avoid 
-      directly mentioning the company's name and ensure the inclusion of relevant keywords, 
-      when appropriate, for optimal ATS system performance.
-      `,
-    },
-  ];
+async function forResume(documents, job_description) {
+  const prompt = `this document is my resume. Refine my resume to emphasize relevant experience and skills for the
+  job without fabricating anything. Do not fabricate any of my
+  qualifications, experiences, or responsibilities. Keep all changes minor
+  and subtle. Write professional summary in a brief paragraph form. In
+  my professional summary include: How many years of experience I
+  have, my specialty or area where you have the most experience, my
+  soft or hard skills that are relevant to the position, any achievements 
+  I've accomplished that brought in results, my Professional career goals,
+  and keywords used in the job posting. Provide 2 to 4 bullet points for
+  each job experience. Keep skills as simple bullet points. Provide
+  maximum 12 skills. Do not change job titles. Avoid directly mentioning
+  the company's name and ensure the inclusion of relevant keywords,
+  when appropriate, for optimal ATS system performance.  
+  ${
+    job_description &&
+    "Here is the job description, i am applying. " + job_description
+  } .
 
-  // Use Promise.all to run all queries in parallel
-  const results = await Promise.all(
-    queries.map(async ({ label, prompt }) => {
-      const response = await queryOpenAiToRefineResume(prompt, documents[0]);
-      if (label == "professionalSummary") return response;
-      return parseJson(response, label);
-    })
-  );
+  These sections must be included in the resume BioData,Education,WorkExperience,Skills and ProfessionalSummary.
+  
+  ouptput must be exactely in this format
+  'Wrap the output in a <body>[whole_output]</body>.
+  Each section must be wrapped inside <section>[section]</section>.
+  Each section  title must be wrapped inside <h1>[section_title]</h1>.
+ If there is any subheading then subheading must be written inside  <h2>[subheadings]</h2>. 
+ If there is any paragraph then paragraph must be written inside  <p>[paragraph]</p>.
+ If there is any bullet then  bullet must be written inside  <li>/[bullet]</li>. 
+ 
+ BioData should be in exactly this format 
 
-  // Destructure the results array
-  const [
-    education,
-    skills,
-    workExperience,
-    reference,
-    socialLinks,
-    professionalSummary,
-  ] = results;
+ <section>
+<h1>BioData</h1>
+<h2>Name</h2>
+<li>[my fullname]</li>
+<h2>Contact</h2>
+<li>[my contact number]</li>
+<h2>Email</h2>
+<li>[my email]</li>
 
-  return {
-    education,
-    workExperience,
-    skills,
-    reference,
-    professionalSummary,
-    socialLinks,
-  };
+</section>
+
+
+This format should be used for Education and work Experience sections.
+
+'<section>
+<h1>Work Experience</h1>
+<h2>Full Stack Developer, SageByte, New York (2021 - 2023)</h2>
+<li>Developed user-friendly solutions using TypeScript, JavaScript, and Solidity.</li>
+<li>Worked with frameworks such as React, Next.js, Node.js, Strapi, Hardhat, and Truffle.</li>
+
+</section>
+ '
+  
+  Use my details from my resume.
+  `;
+
+  return await queryOpenAiToRefineResume(prompt, documents[0]);
 }
 
 module.exports = { generateDocuments };
@@ -487,3 +377,38 @@ const schema = {
   },
   professionalSummary: "",
 };
+
+[
+  {
+    sectionTitle: "BioData", //h1 in each section
+    sectionDescription: ["paragraph1", "paragraph2", "paragraph3"],
+    bullets: ["li 1", "li 2", "li 3", "li 4"],
+    subSections: [
+      {
+        subSectionTitle: "h2 content here",
+        bullets: ["li 1", "li 2", "li 3", "li 4"],
+      },
+
+      {
+        subSectionTitle: "h2 content here",
+        bullets: ["li 1", "li 2", "li 3", "li 4"],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Work Experience", //h1 in each section
+    sectionDescription: ["paragraph1", "paragraph2", "paragraph3"],
+    bullets: ["li 1", "li 2", "li 3", "li 4"],
+    subSections: [
+      {
+        subSectionTitle: "h2 content here",
+        bullets: ["li 1", "li 2", "li 3", "li 4"],
+      },
+
+      {
+        subSectionTitle: "h2 content here",
+        bullets: ["li 1", "li 2", "li 3", "li 4"],
+      },
+    ],
+  },
+];
