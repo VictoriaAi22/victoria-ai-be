@@ -291,7 +291,7 @@ async function forResume(documents, job_description) {
     "Here is the job description, i am applying. " + job_description
   } .
 
-  These sections must be included in the resume BioData,Education,WorkExperience,Skills and ProfessionalSummary.
+  These sections must be included in the resume BioData,Education,WorkExperience,Skills,SocialLink and ProfessionalSummary.
   
   ouptput must be exactely in this format
   'Wrap the output in a <body>[whole_output]</body>.
@@ -325,7 +325,16 @@ This format should be used for Education and work Experience sections.
 
 </section>
  '
-  
+ This format should be used for SocialLink.
+
+ '<section>
+ <h1>Social Link</h1>
+ <h2>[plateform name]</h2>
+ <li>link here</li> 
+ so on and so forth
+ 
+ </section>
+  '
   Use my details from my resume.
   `;
 
