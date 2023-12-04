@@ -1,21 +1,21 @@
 {
   "collectionName": "components_template_components_cover_letters",
   "info": {
-    "displayName": "Cover Letter"
+    "displayName": "Cover Letter",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "previewImage": {
-      "allowedTypes": ["images"],
       "type": "media",
       "multiple": false,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "sections": {
-      "displayName": "Sections",
-      "type": "component",
-      "repeatable": false,
-      "component": "template-components.cover-letter-sections"
+      "type": "json"
     }
   }
 }

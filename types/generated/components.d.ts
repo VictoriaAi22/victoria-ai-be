@@ -306,10 +306,11 @@ export interface TemplateComponentsCoverLetter extends Schema.Component {
   collectionName: 'components_template_components_cover_letters';
   info: {
     displayName: 'Cover Letter';
+    description: '';
   };
   attributes: {
     previewImage: Attribute.Media & Attribute.Required;
-    sections: Attribute.Component<'template-components.cover-letter-sections'>;
+    sections: Attribute.JSON;
   };
 }
 
@@ -408,7 +409,7 @@ export interface TemplateComponentsResume extends Schema.Component {
   };
   attributes: {
     previewImage: Attribute.Media & Attribute.Required;
-    sections: Attribute.Component<'template-components.resume-sections'>;
+    sections: Attribute.JSON;
   };
 }
 
@@ -416,6 +417,7 @@ export interface TemplateComponentsTemplate extends Schema.Component {
   collectionName: 'components_template_components_template';
   info: {
     displayName: 'Template';
+    description: '';
   };
   attributes: {
     coverLetter: Attribute.Component<'template-components.cover-letter'>;

@@ -30,20 +30,20 @@ async function generateDocuments(req) {
   let job_description = body?.job_description;
   let user_input = body?.notes;
 
-  let option;
-  if (body?.option == 1) {
-    option = `Relate experience from my resume for the job position I am applying to. Chose skills or traits the employer is requiring to 
+  let what_describes_you;
+  if (body?.what_describes_you == 1) {
+    what_describes_you = `Relate experience from my resume for the job position I am applying to. Chose skills or traits the employer is requiring to 
     demonstrate I meet and exceed the requirements. Ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance
     `;
   }
-  if (body?.option == 2) {
-    option = `Acknowledge that I am entering the work force after finishing my degree but my previous job experience applies to the skills 
+  if (body?.what_describes_you == 2) {
+    what_describes_you = `Acknowledge that I am entering the work force after finishing my degree but my previous job experience applies to the skills 
     and requirements used at this job. ensure the inclusion of relevant keywords, when 
     appropriate, for optimal ATS system performance
     `;
   }
-  if (body?.option == 3) {
-    option = `Acknowledge that I am changing career fields but my previous job experience applies to the skills and requirements used 
+  if (body?.what_describes_you == 3) {
+    what_describes_you = `Acknowledge that I am changing career fields but my previous job experience applies to the skills and requirements used 
     at this job. ensure the inclusion of relevant keywords, when appropriate, for optimal 
     ATS system performance
      `;
@@ -145,7 +145,7 @@ async function generateDocuments(req) {
     const coverletter = await forCoverLetter(
       documents,
       user_input,
-      option,
+      what_describes_you,
       professionalTitle,
       job_description
     );
@@ -231,11 +231,11 @@ function validateURL(url) {
 async function forCoverLetter(
   documents,
   user_input,
-  option,
+  what_describes_you,
   professionalTitle,
   job_description
 ) {
-  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, and a call to action.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at [company name]. ${option} . ${
+  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, and a call to action.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at [company name]. ${what_describes_you} . ${
     user_input && "Also mention that " + user_input
   } .${
     job_description &&

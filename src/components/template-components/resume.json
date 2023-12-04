@@ -10,13 +10,12 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "sections": {
-      "displayName": "Sections",
-      "type": "component",
-      "repeatable": false,
-      "component": "template-components.resume-sections"
+      "type": "json"
     }
   }
 }

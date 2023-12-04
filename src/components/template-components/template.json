@@ -1,7 +1,8 @@
 {
   "collectionName": "components_template_components_template",
   "info": {
-    "displayName": "Template"
+    "displayName": "Template",
+    "description": ""
   },
   "options": {},
   "attributes": {
