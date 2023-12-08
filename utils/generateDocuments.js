@@ -156,6 +156,7 @@ async function generateDocuments(req) {
         // job_page.push(docs);
         const query = `From this document  extract the company name and company address.
             This is the company website ${company_url}.
+          If the company name is not found , you must use website top level domain name, without www and .com/.uk/.ca at the end , as company name.
 
           Ouptput must be exactely in this format:
           '<body>
@@ -177,7 +178,7 @@ async function generateDocuments(req) {
         const companyInfoText = await queryOpenAiToRefineResume(query, docs);
         console.log("companyInfo is ", companyInfoText);
         const formatedcompanyInfo = convertHtmlToJson(companyInfoText);
-        companyInfo = formatedcompanyInfo;
+        companyInfo = formatedcompanyInfo[0];
         console.log("formatedcompanyInfo is ", companyInfo);
       } catch (error) {
         console.log("error occured while sraping job_listing_url", error);
@@ -300,9 +301,18 @@ async function forCoverLetter(
   job_description,
   companyInfo
 ) {
+  console.log(
+    " company name is ",
+    companyInfo?.subSections?.length > 0 &&
+      companyInfo?.subSections[0]?.bullets?.length > 0
+      ? companyInfo?.subSections[0]?.bullets[0]
+      : " [COMPANY NAME] "
+  );
+
   const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, and a call to action.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at ${
-    companyInfo?.subSections?.bullets?.length > 0
-      ? companyInfo?.subSections?.bullets[0]
+    companyInfo?.subSections?.length > 0 &&
+    companyInfo?.subSections[0]?.bullets?.length > 0
+      ? companyInfo?.subSections[0]?.bullets[0]
       : " [COMPANY NAME] "
   }. ${what_describes_you} . ${
     user_input && "Also mention that " + user_input
@@ -328,16 +338,6 @@ async function forCoverLetter(
     // Handle the error here, you can log it or take other actions.
     console.error(`Error in promise: ${error}`);
     return ""; // Return a placeholder value
-  }
-}
-function parseJson(input, type) {
-  try {
-    const parsedData = JSON.parse(input);
-    if (Object.keys(parsedData[type]).length == 0) return schema[type];
-    return parsedData[type];
-  } catch (error) {
-    console.log("error occured for this ", input);
-    return schema[type];
   }
 }
 
@@ -411,82 +411,3 @@ This format should be used for Education and work Experience sections.
 }
 
 module.exports = { generateDocuments };
-
-const schema = {
-  education: {
-    0: {
-      school: "your school",
-      endYear: "end date",
-      startYear: "start date",
-      achievements: {
-        0: "list achievements to be in bullet points",
-      },
-      courseOfStudy: " course title",
-    },
-  },
-  workExperience: {
-    0: {
-      company: "Company Name",
-      endYear: "End Year(ex. 2018)",
-      jobType: "Full Time, Contract or remote",
-      location: "Company Location",
-      startYear: "Start Year(ex.2017)",
-      achievements: {
-        0: "list achievements to be in bullet points",
-      },
-    },
-  },
-  otherSections: {},
-  skills: {
-    0: " your skill",
-  },
-  reference: {
-    0: {
-      name: "Referee Name ",
-      contact: "Referee Contact",
-    },
-  },
-  socialLinks: {
-    0: {
-      github: "https://github.com",
-      facebook: "https://facebook.com",
-      linkedIn: "https://linkedIn.com",
-    },
-  },
-  professionalSummary: "",
-};
-
-[
-  {
-    sectionTitle: "BioData", //h1 in each section
-    sectionDescription: ["paragraph1", "paragraph2", "paragraph3"],
-    bullets: ["li 1", "li 2", "li 3", "li 4"],
-    subSections: [
-      {
-        subSectionTitle: "h2 content here",
-        bullets: ["li 1", "li 2", "li 3", "li 4"],
-      },
-
-      {
-        subSectionTitle: "h2 content here",
-        bullets: ["li 1", "li 2", "li 3", "li 4"],
-      },
-    ],
-  },
-  {
-    sectionTitle: "Work Experience", //h1 in each section
-    sectionDescription: ["paragraph1", "paragraph2", "paragraph3"],
-    bullets: ["li 1", "li 2", "li 3", "li 4"],
-    subSections: [
-      {
-        subSectionTitle: "h2 content here",
-        bullets: ["li 1", "li 2", "li 3", "li 4"],
-      },
-
-      {
-        subSectionTitle: "h2 content here",
-        bullets: ["li 1", "li 2", "li 3", "li 4"],
-      },
-    ],
-  },
-];
