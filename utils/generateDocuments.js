@@ -25,8 +25,23 @@ async function generateDocuments(req) {
   const company_url = body?.company_url;
   const job_listing_url = body?.job_listing_url;
   const document_url = body?.document_url;
-  let professionalTitle = "[ Job Title Applying To]";
-  let jobtitle = body?.jobtitle;
+  let professionalTitle = "[ JOB TITLE APPLYING TO ]";
+  let companyInfo = {
+    sectionTitle: "Company Info",
+    sectionDescription: [],
+    bullets: [],
+    subSections: [
+      {
+        subSectionTitle: "Company Name",
+        bullets: ["[ COMPANY NAME ]"],
+      },
+      {
+        subSectionTitle: "Company Address",
+        bullets: ["[ COMPANY ADDRESS ]"],
+      },
+    ],
+  };
+
   let job_description = body?.job_description;
   let user_input = body?.notes;
 
@@ -122,6 +137,53 @@ async function generateDocuments(req) {
       }
     }
 
+    // /*----------scrape company_url------------*/
+
+    if (body?.company_url && validateURL(body?.company_url)) {
+      try {
+        const limit = 1;
+        const companyDetail = await webCrawl(
+          validateURL(body?.company_url),
+          5000
+        );
+
+        if (companyDetail?.error) return;
+
+        const jsonString = JSON.stringify(companyDetail);
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const loader = new JSONLoader(blob);
+        const docs = await loader.load();
+        // job_page.push(docs);
+        const query = `From this document  extract the company name and company address.
+            This is the company website ${company_url}.
+
+          Ouptput must be exactely in this format:
+          '<body>
+          <section>  
+          <h1>Company Info</h1>
+          <h2>Company Name</h2>
+          <li>[COMPANY NAME]</li>
+         
+          <h2>Company Address</h2>
+          <li>[COMPANY ADDRESS]</li>
+          </section>
+          
+          </body>'
+
+  
+  If the company name and company address are not found in this document just  use [COMPANY NAME] and [COMPANY ADDRESS] as placeholder .
+      `;
+
+        const companyInfoText = await queryOpenAiToRefineResume(query, docs);
+        console.log("companyInfo is ", companyInfoText);
+        const formatedcompanyInfo = convertHtmlToJson(companyInfoText);
+        companyInfo = formatedcompanyInfo;
+        console.log("formatedcompanyInfo is ", companyInfo);
+      } catch (error) {
+        console.log("error occured while sraping job_listing_url", error);
+      }
+    }
+
     /*----------load resumes------------*/
 
     // let document_url =
@@ -147,7 +209,8 @@ async function generateDocuments(req) {
       user_input,
       what_describes_you,
       professionalTitle,
-      job_description
+      job_description,
+      companyInfo
     );
 
     const resume = await forResume(documents, job_description);
@@ -196,6 +259,7 @@ async function generateDocuments(req) {
           bullets: [],
           subSections: [],
         },
+        companyInfo,
         ...formatedCoverletter,
       ],
       resume: formatedResume,
@@ -233,9 +297,14 @@ async function forCoverLetter(
   user_input,
   what_describes_you,
   professionalTitle,
-  job_description
+  job_description,
+  companyInfo
 ) {
-  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, and a call to action.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at [company name]. ${what_describes_you} . ${
+  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, and a call to action.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at ${
+    companyInfo?.subSections?.bullets?.length > 0
+      ? companyInfo?.subSections?.bullets[0]
+      : " [COMPANY NAME] "
+  }. ${what_describes_you} . ${
     user_input && "Also mention that " + user_input
   } .${
     job_description &&
