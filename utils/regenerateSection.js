@@ -13,6 +13,7 @@ const {
 } = require("./ai.js");
 // const { v4 as uuidv4 }=require("uuid");
 const { webCrawl } = require("./crawler.js");
+const convertHtmlToJson = require("./convertHtmlToJson.js");
 
 async function regenerateSection(req) {
   const documents = [];
@@ -24,28 +25,42 @@ async function regenerateSection(req) {
   const company_url = body?.company_url;
   const job_listing_url = body?.job_listing_url;
   const document_url = body?.document_url;
-  let professionalTitle = "[ Job Title Applying To]";
-  let jobtitle = body?.jobtitle;
-  let job_description = body?.job_description;
-  let user_input = body?.notes;
   const section = body?.section;
   const document_type = body?.document_type;
-  if (!section || !document_type) return;
+  let professionalTitle = "[ JOB TITLE APPLYING TO ]";
+  let companyInfo = {
+    sectionTitle: "Company Info",
+    sectionDescription: [],
+    bullets: [],
+    subSections: [
+      {
+        subSectionTitle: "Company Name",
+        bullets: ["[ COMPANY NAME ]"],
+      },
+      {
+        subSectionTitle: "Company Address",
+        bullets: ["[ COMPANY ADDRESS ]"],
+      },
+    ],
+  };
 
-  let option;
-  if (body?.option == 1) {
-    option = `Relate experience from my resume for the job position I am applying to. Chose skills or traits the employer is requiring to 
+  let job_description = body?.job_description;
+  let user_input = body?.notes;
+
+  let what_describes_you;
+  if (body?.what_describes_you == 1) {
+    what_describes_you = `Relate experience from my resume for the job position I am applying to. Chose skills or traits the employer is requiring to 
     demonstrate I meet and exceed the requirements. Ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance
     `;
   }
-  if (body?.option == 2) {
-    option = `Acknowledge that I am entering the work force after finishing my degree but my previous job experience applies to the skills 
+  if (body?.what_describes_you == 2) {
+    what_describes_you = `Acknowledge that I am entering the work force after finishing my degree but my previous job experience applies to the skills 
     and requirements used at this job. ensure the inclusion of relevant keywords, when 
     appropriate, for optimal ATS system performance
     `;
   }
-  if (body?.option == 3) {
-    option = `Acknowledge that I am changing career fields but my previous job experience applies to the skills and requirements used 
+  if (body?.what_describes_you == 3) {
+    what_describes_you = `Acknowledge that I am changing career fields but my previous job experience applies to the skills and requirements used 
     at this job. ensure the inclusion of relevant keywords, when appropriate, for optimal 
     ATS system performance
      `;
@@ -56,30 +71,6 @@ async function regenerateSection(req) {
   }
 
   try {
-    /*----------scrape company_url------------*/
-
-    // if (validateURL(company_url)) {
-    //   try {
-    //     const limit = 3;
-    //     const companyWebsiteContent = await webCrawl(
-    //       validateURL(company_url) as string,
-    //       limit
-    //     );
-
-    //     const jsonString = JSON.stringify(companyWebsiteContent);
-    //     const blob = new Blob([jsonString], { type: "application/json" });
-    //     const loader = new JSONLoader(blob);
-    //     const docs = await loader.load();
-    //     documents.push(docs);
-    //     console.log(
-    //       "------------- companyWebsiteContent docs are ----------------- ",
-    //       docs
-    //     );
-    //   } catch (error) {
-    //     console.log("error occured while sraping company_url", error);
-    //   }
-    // }
-
     // /*----------scrape job_listing_url------------*/
 
     if (!body?.jobtitle && validateURL(job_listing_url)) {
@@ -97,7 +88,7 @@ async function regenerateSection(req) {
         const docs = await loader.load();
         // job_page.push(docs);
         const query =
-          "extract the job title from this document.extract only the job title. dont add any additional words.i am apply for this job.if you dont know say i dont know.";
+          "extract the exact job title from this document. don't add any additional phrase or words.Dont say title is [title] or title in document is [title]. i need just [title]. i am apply for this job.if you dont know say i dont know.";
         const title = await queryOpenAiToRefineResume(query, docs);
         console.log("title is ", title);
 
@@ -124,6 +115,54 @@ async function regenerateSection(req) {
       }
     }
 
+    // /*----------scrape company_url------------*/
+
+    if (body?.company_url && validateURL(body?.company_url)) {
+      try {
+        const limit = 1;
+        const companyDetail = await webCrawl(
+          validateURL(body?.company_url),
+          5000
+        );
+
+        if (companyDetail?.error) return;
+
+        const jsonString = JSON.stringify(companyDetail);
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const loader = new JSONLoader(blob);
+        const docs = await loader.load();
+        // job_page.push(docs);
+        const query = `From this document  extract the company name and company address.
+            This is the company website ${company_url}.
+          If the company name is not found , you must use website top level domain name, without www and .com/.uk/.ca at the end , as company name.
+
+          Ouptput must be exactely in this format:
+          '<body>
+          <section>  
+          <h1>Company Info</h1>
+          <h2>Company Name</h2>
+          <li>[COMPANY NAME]</li>
+         
+          <h2>Company Address</h2>
+          <li>[COMPANY ADDRESS]</li>
+          </section>
+          
+          </body>'
+
+  
+  If the company name and company address are not found in this document just  use [COMPANY NAME] and [COMPANY ADDRESS] as placeholder .
+      `;
+
+        const companyInfoText = await queryOpenAiToRefineResume(query, docs);
+        console.log("companyInfo is ", companyInfoText);
+        const formatedcompanyInfo = convertHtmlToJson(companyInfoText);
+        companyInfo = formatedcompanyInfo[0];
+        console.log("formatedcompanyInfo is ", companyInfo);
+      } catch (error) {
+        console.log("error occured while sraping job_listing_url", error);
+      }
+    }
+
     /*----------load resumes------------*/
 
     // let document_url =
@@ -144,16 +183,44 @@ async function regenerateSection(req) {
       documents.push(docs);
     }
 
-    let data;
-    if (document_type == "coverletter")
-      data = await forCoverLetter(documents, user_input, option, section);
-    if (document_type == "resume") data = await forResume(documents, section);
+    if (document_type == "coverletter") {
+      const coverletter = await generateCoverLetter(
+        documents,
+        user_input,
+        what_describes_you,
+        professionalTitle,
+        job_description,
+        companyInfo,
+        section
+      );
+      const formatedCoverletter = convertHtmlToJson(coverletter);
+      let selectedSection = [];
+      selectedSection = formatedCoverletter?.filter((i) =>
+        i?.sectionTitle?.toLowerCase()?.includes(section?.toLowerCase())
+      );
+      const data = {
+        status: 200,
+        section: selectedSection[0],
+      };
 
-    console.log(" data is ", data);
-    return {
-      status: 200,
-      [section]: data,
-    };
+      return data;
+    }
+
+    if (document_type == "resume") {
+      const resume = await genarateResume(documents, job_description, section);
+      const formatedResume = convertHtmlToJson(resume);
+      let selectedSection = [];
+      selectedSection = formatedResume?.filter((i) =>
+        i?.sectionTitle?.toLowerCase()?.includes(section?.toLowerCase())
+      );
+
+      const data = {
+        status: 200,
+        section: selectedSection[0],
+      };
+
+      return data;
+    }
   } catch (err) {
     console.log("error: ", err);
     return { status: 500, error: err };
@@ -163,7 +230,7 @@ async function regenerateSection(req) {
 function validateURL(url) {
   try {
     const parsedURL = new URL(url);
-    console.log("parsed url is ", parsedURL);
+    //console.log("parsed url is ", parsedURL);
     // Check if the URL has a valid domain (hostname)
     if (!parsedURL.hostname) {
       return false;
@@ -180,158 +247,122 @@ function validateURL(url) {
   }
 }
 
-async function forCoverLetter(documents, user_input, option, section) {
-  const queries = [
-    {
-      label: "greeting",
-      prompt: `generate a greeting section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now. dont include greeting or salutions at the start or end becuase this section will be followed by other sections`,
-    },
-    {
-      label: "opener",
-      prompt: `generate a Opener section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.dont include greeting or salutions at the start or end becuase this section will be followed by other sections. dont introduce me again as introduction is already done.`,
-    },
-    {
-      label: "body_1",
-      prompt: `generate a body paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.dont include greeting or salutions at the start or end becuase this section will be followed by other sections. dont introduce me again as introduction is already done. ${option}`,
-    },
-    {
-      label: "body_2",
-      prompt: `generate a middle paragraph for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont know. Demonstrate an understanding in the company's mission and culture.  Relate experiences or skills from my resume for key words used in the job position requirements. ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance.`,
-    },
-    {
-      label: "fullname",
-      prompt: `Extract my full name from this document.dont add any additional words. dont say i dont now.`,
-    },
-    {
-      label: "email",
-      prompt: `Extract my email from this document.dont add any additional words. dont say i dont now.`,
-    },
-    {
-      label: "phone",
-      prompt: `Extract my phone number from this document.dont add any additional words. dont say i dont now.`,
-    },
-    {
-      label: "conclusion",
-      prompt: `generate a conclusion section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont know. Conclude with a succinct summary of my strengths from my resume and show interest in the company. ${user_input}`,
-    },
+async function generateCoverLetter(
+  documents,
+  user_input,
+  what_describes_you,
+  professionalTitle,
+  job_description,
+  companyInfo,
+  section
+) {
+  console.log(
+    " company name is ",
+    companyInfo?.subSections?.length > 0 &&
+      companyInfo?.subSections[0]?.bullets?.length > 0
+      ? companyInfo?.subSections[0]?.bullets[0]
+      : " [COMPANY NAME] "
+  );
 
-    {
-      label: "call_to_action",
-      prompt: `generate a call to action section for a cover letter from this document. Dont use he , use I. Don't use \n as line breaker. dont say i dont now.`,
-    },
-  ];
+  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, call to action and regards.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at ${
+    companyInfo?.subSections?.length > 0 &&
+    companyInfo?.subSections[0]?.bullets?.length > 0
+      ? companyInfo?.subSections[0]?.bullets[0]
+      : " [COMPANY NAME] "
+  }. ${what_describes_you} . ${
+    user_input && "Also mention that " + user_input
+  } .${
+    job_description &&
+    "Here is the job description, i am applying. " + job_description
+  }
+  
+  ouptput must be exactely in this format
+  'Wrap the output in a <body>[whole_output]</body>.
+  Each section must be wrapped inside <section>[section]</section>.
+  Each section  title must be wrapped inside <h1>[section_title]</h1>.
+ If there is any subheading then subheading must be written inside  <h2>[subheadings]</h2>. 
+ If there is any paragraph then paragraph must be written inside  <p>[paragraph]</p>.
+ If there is any bullet then  bullet must be written inside  <li>/[bullet]</li>. '
+  
+  Use my details from my resume.
+  `;
 
-  const _section = queries.find((i) => i.label == section);
-  console.log("_section is ", _section);
   try {
-    return await queryOpenAiToRefineResume(_section.prompt, documents[0]);
+    return await queryOpenAiToRefineResume(prompt, documents[0]);
   } catch (error) {
     // Handle the error here, you can log it or take other actions.
     console.error(`Error in promise: ${error}`);
     return ""; // Return a placeholder value
   }
 }
-function parseJson(input, type) {
-  try {
-    const parsedData = JSON.parse(input);
-    if (Object.keys(parsedData[type]).length == 0) return schema[type];
-    return parsedData[type];
-  } catch (error) {
-    console.log("error occured for this ", input);
-    return schema[type];
-  }
-}
 
-async function forResume(documents, section) {
-  const queries = [
-    {
-      label: "education",
-      prompt: `Extract education section in exactly this format "{"education":{"0":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"},"1":{"school":"Udacity","endYear":"2020","startYear":"2017","achievements":{"0":"list achievements to be in bullet points"},"courseOfStudy":"Full Stack Development"}}}" . include maximum 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know."`,
-    },
-    {
-      label: "skills",
-      prompt: `Extract skill section in exactly this format "{"skills":{"0":"React","1":"NodeJs"}}" . it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know. Refine my skills from my resume to emphasize relevant 12 skills for the job without fabricating any skills. Keep skills as simple bullet points. Keep all changes minor and subtle. ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance.`,
-    },
-    {
-      label: "workExperience",
-      prompt: `Extract work experience section in exactly this format "{"workExperience":{"0":{"company":"Company Name","endYear":"End Year(ex. 2018)","jobType":"Full Time, Contract or remote","location":"Company Location","startYear":"Start Year(ex.2017)","achievements":{"0":"list achievements to be in bullet points"}}}}". include max 3. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know. Refine my previous work experience from my resume to emphasize relevant experience and skills for the job without fabricating anything. Do not fabricate any of my qualifications, experiences, or responsibilities. Keep all changes minor and subtle. State 3-4 bullet points for each job experience. ensure the inclusion of relevant keywords, when appropriate, for optimal ATS system performance. Do not fabricate any 
-      responsibilities or experience
-      `,
-    },
-    {
-      label: "reference",
-      prompt: `Extract reference detail in exactly this format "{"reference":{"0":{"name":"Referee Name ","contact":"Referee Contact"}}}" . if there is no reference, don't include my information. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
-    },
-    {
-      label: "socialLinks",
-      prompt: `Extract my socialLinks detail in exactly this format "{"socialLinks":{"0":{"github":"https://github.com","facebook":"https://facebook.com","linkedIn":"https://linkedIn.com"}}}" . if there is no reference, don't include my information. it should be a valid stringified json. if you don't know just give me the same format with empty strings. don't say i don't know.`,
-    },
-    {
-      label: "professionalSummary",
-      prompt: `Extract my professionalSummary from this document in 130 words. don't use my name. use I . don't say i don't know. Write professional summary in a brief 
-      paragraph form. In my professional summary include: How many years of experience I 
-      have, my specialty or area where you have the most experience, my soft or hard skills 
-      that are relevant to the position, any achievements I've accomplished that brought 
-      in results, my Professional career goals, and keywords used in the job posting. Avoid 
-      directly mentioning the company's name and ensure the inclusion of relevant keywords, 
-      when appropriate, for optimal ATS system performance.
-      `,
-    },
-  ];
+async function genarateResume(documents, job_description, section) {
+  const prompt = `this document is my resume. Refine my resume to emphasize relevant experience and skills for the
+  job without fabricating anything. Do not fabricate any of my
+  qualifications, experiences, or responsibilities. Keep all changes minor
+  and subtle. Write professional summary in a brief paragraph form. In
+  my professional summary include: How many years of experience I
+  have, my specialty or area where you have the most experience, my
+  soft or hard skills that are relevant to the position, any achievements 
+  I've accomplished that brought in results, my Professional career goals,
+  and keywords used in the job posting. Provide 2 to 4 bullet points for
+  each job experience. Keep skills as simple bullet points. Provide
+  maximum 12 skills. Each skill must not be of more then 2 words. Do not change job titles. Avoid directly mentioning
+  the company's name and ensure the inclusion of relevant keywords,
+  when appropriate, for optimal ATS system performance.  
+  ${
+    job_description &&
+    "Here is the job description, i am applying. " + job_description
+  } .
 
-  // Use Promise.all to run all queries in parallel
-  const _section = queries.find((i) => i.label == section);
-  console.log("_section is ", _section);
-  const response = await queryOpenAiToRefineResume(
-    _section.prompt,
-    documents[0]
-  );
-  if (_section.label == "professionalSummary") return response;
-  return parseJson(response, _section.label);
+  These sections must be included in the resume BioData,Education,WorkExperience,Skills,SocialLink and ProfessionalSummary.
+  
+  ouptput must be exactely in this format
+  'Wrap the output in a <body>[whole_output]</body>.
+  Each section must be wrapped inside <section>[section]</section>.
+  Each section  title must be wrapped inside <h1>[section_title]</h1>.
+ If there is any subheading then subheading must be written inside  <h2>[subheadings]</h2>. 
+ If there is any paragraph then paragraph must be written inside  <p>[paragraph]</p>.
+ If there is any bullet then  bullet must be written inside  <li>/[bullet]</li>. 
+ 
+ BioData should be in exactly this format 
+
+ <section>
+<h1>BioData</h1>
+<h2>Name</h2>
+<li>[my fullname]</li>
+<h2>Contact</h2>
+<li>[my contact number]</li>
+<h2>Email</h2>
+<li>[my email]</li>
+
+</section>
+
+
+This format should be used for Education and work Experience sections.
+
+'<section>
+<h1>Work Experience</h1>
+<h2>Full Stack Developer, SageByte, New York (2021 - 2023)</h2>
+<li>Developed user-friendly solutions using TypeScript, JavaScript, and Solidity.</li>
+<li>Worked with frameworks such as React, Next.js, Node.js, Strapi, Hardhat, and Truffle.</li>
+
+</section>
+ '
+ This format should be used for SocialLink.
+
+ '<section>
+ <h1>Social Link</h1>
+ <h2>[plateform name]</h2>
+ <li>link here</li> 
+ so on and so forth
+ 
+ </section>
+  '
+  Use my details from my resume.
+  `;
+
+  return await queryOpenAiToRefineResume(prompt, documents[0]);
 }
 
 module.exports = { regenerateSection };
-
-const schema = {
-  education: {
-    0: {
-      school: "your school",
-      endYear: "end date",
-      startYear: "start date",
-      achievements: {
-        0: "list achievements to be in bullet points",
-      },
-      courseOfStudy: " course title",
-    },
-  },
-  workExperience: {
-    0: {
-      company: "Company Name",
-      endYear: "End Year(ex. 2018)",
-      jobType: "Full Time, Contract or remote",
-      location: "Company Location",
-      startYear: "Start Year(ex.2017)",
-      achievements: {
-        0: "list achievements to be in bullet points",
-      },
-    },
-  },
-  otherSections: {},
-  skills: {
-    0: " your skill",
-  },
-  reference: {
-    0: {
-      name: "Referee Name ",
-      contact: "Referee Contact",
-    },
-  },
-  socialLinks: {
-    0: {
-      github: "https://github.com",
-      facebook: "https://facebook.com",
-      linkedIn: "https://linkedIn.com",
-    },
-  },
-  professionalSummary: "",
-};

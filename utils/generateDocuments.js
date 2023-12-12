@@ -218,6 +218,9 @@ async function generateDocuments(req) {
     console.log(" coverletter is ", coverletter);
     console.log(" resume is ", resume);
     const formatedCoverletter = convertHtmlToJson(coverletter);
+    const filteredCoverletter = formatedCoverletter?.filter(
+      (i) => !i?.sectionTitle?.toLowerCase()?.includes("regard")
+    );
     const formatedResume = convertHtmlToJson(resume);
     // console.log({ bio, middle, bottom });
     //await createPineconeIndex(indexName);
@@ -261,7 +264,7 @@ async function generateDocuments(req) {
           subSections: [],
         },
         companyInfo,
-        ...formatedCoverletter,
+        ...filteredCoverletter,
       ],
       resume: formatedResume,
     };
@@ -309,7 +312,7 @@ async function forCoverLetter(
       : " [COMPANY NAME] "
   );
 
-  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, and a call to action.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at ${
+  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion,  call to action and regards.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at ${
     companyInfo?.subSections?.length > 0 &&
     companyInfo?.subSections[0]?.bullets?.length > 0
       ? companyInfo?.subSections[0]?.bullets[0]
@@ -352,7 +355,7 @@ async function forResume(documents, job_description) {
   I've accomplished that brought in results, my Professional career goals,
   and keywords used in the job posting. Provide 2 to 4 bullet points for
   each job experience. Keep skills as simple bullet points. Provide
-  maximum 12 skills. Do not change job titles. Avoid directly mentioning
+  maximum 12 skills. Each skill must not be of more then 2 words. Do not change job titles. Avoid directly mentioning
   the company's name and ensure the inclusion of relevant keywords,
   when appropriate, for optimal ATS system performance.  
   ${
