@@ -856,6 +856,13 @@ export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
     template: Attribute.Component<'template-components.template'>;
     addProfilePicture: Attribute.Boolean & Attribute.DefaultTo<false>;
     templateType: Attribute.String;
+    job_listing_url: Attribute.String;
+    company_url: Attribute.Text;
+    notes: Attribute.Text;
+    what_describes_you: Attribute.String;
+    jobtitle: Attribute.String;
+    job_description: Attribute.Text;
+    document_url: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

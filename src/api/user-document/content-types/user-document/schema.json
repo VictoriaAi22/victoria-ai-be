@@ -24,7 +24,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "html": {
       "type": "string"
@@ -45,6 +47,27 @@
       "required": false
     },
     "templateType": {
+      "type": "string"
+    },
+    "job_listing_url": {
+      "type": "string"
+    },
+    "company_url": {
+      "type": "text"
+    },
+    "notes": {
+      "type": "text"
+    },
+    "what_describes_you": {
+      "type": "string"
+    },
+    "jobtitle": {
+      "type": "string"
+    },
+    "job_description": {
+      "type": "text"
+    },
+    "document_url": {
       "type": "string"
     }
   }
