@@ -215,13 +215,40 @@ async function generateDocuments(req) {
     );
 
     const resume = await forResume(documents, job_description);
-    console.log(" coverletter is ", coverletter);
-    console.log(" resume is ", resume);
+
     const formatedCoverletter = convertHtmlToJson(coverletter);
     const filteredCoverletter = formatedCoverletter?.filter(
       (i) => !i?.sectionTitle?.toLowerCase()?.includes("regard")
     );
     const formatedResume = convertHtmlToJson(resume);
+
+    let socialLink = [];
+    socialLink = formatedResume?.filter((i) =>
+      i?.sectionTitle?.toLowerCase()?.includes("social")
+    );
+
+    const filteredResume = formatedResume
+      ?.map((i) => {
+        if (!i?.sectionTitle?.toLowerCase()?.includes("social")) {
+          if (
+            i?.sectionTitle?.toLowerCase()?.includes("bio") &&
+            i?.sectionTitle?.toLowerCase()?.includes("data")
+          ) {
+            const bio = {
+              ...i,
+              socialLink: socialLink[0] ? socialLink[0]?.subSections : [],
+            };
+
+            return bio;
+          } else {
+            return i;
+          }
+        }
+        // Return null or undefined for items that should be excluded
+        return null;
+      })
+      .filter(Boolean); // Filter out null or undefined values
+
     // console.log({ bio, middle, bottom });
     //await createPineconeIndex(indexName);
     // for (const docs of documents) {
@@ -266,7 +293,7 @@ async function generateDocuments(req) {
         companyInfo,
         ...filteredCoverletter,
       ],
-      resume: formatedResume,
+      resume: filteredResume,
     };
 
     return data;
@@ -304,14 +331,6 @@ async function forCoverLetter(
   job_description,
   companyInfo
 ) {
-  console.log(
-    " company name is ",
-    companyInfo?.subSections?.length > 0 &&
-      companyInfo?.subSections[0]?.bullets?.length > 0
-      ? companyInfo?.subSections[0]?.bullets[0]
-      : " [COMPANY NAME] "
-  );
-
   const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion,  call to action and regards.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at ${
     companyInfo?.subSections?.length > 0 &&
     companyInfo?.subSections[0]?.bullets?.length > 0

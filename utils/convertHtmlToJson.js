@@ -47,7 +47,6 @@ function convertHtmlToJson(html) {
       output.push(sectionObject);
     });
 
-    console.log(output);
     return output;
   } catch (error) {
     throw new Error();
