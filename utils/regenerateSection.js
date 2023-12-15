@@ -264,7 +264,7 @@ async function generateCoverLetter(
       : " [COMPANY NAME] "
   );
 
-  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, call to action and regards.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at ${
+  const prompt = `This document is my resume. make a concise 1-page cover letter using my resume that doesn’t take word for word points from the following job listing. Create cover letter in the format of greeting, opener, body 1, body 2, body 3, conclusion, call to action,contact and regards.  I want my cover letter to write a story that cannot be seen on my resume and creates a great first impression. Relate experience from my resume for the job as ${professionalTitle}, at ${
     companyInfo?.subSections?.length > 0 &&
     companyInfo?.subSections[0]?.bullets?.length > 0
       ? companyInfo?.subSections[0]?.bullets[0]
