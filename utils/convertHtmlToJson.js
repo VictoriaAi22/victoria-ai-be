@@ -13,29 +13,55 @@ function convertHtmlToJson(html) {
 
       let currentH2 = null;
 
-      $("h2, li", section).each((subIndex, element) => {
-        const tagName = $(element).prop("tagName").toLowerCase();
-        const text = $(element).text().trim();
+      $("h2, li, institute, startdate, enddate", section).each(
+        (subIndex, element) => {
+          const tagName = $(element).prop("tagName").toLowerCase();
+          const text = $(element).text().trim();
 
-        if (tagName === "h2") {
-          currentH2 = text;
-          subSections.push({
-            subSectionTitle: text,
-            bullets: [],
-          });
-        } else if (tagName === "li") {
-          if (currentH2) {
-            const subSection = subSections.find(
-              (sub) => sub.subSectionTitle === currentH2
-            );
-            if (subSection) {
-              subSection.bullets.push(text);
+          if (
+            tagName === "h2" &&
+            sectionTitle != "Education" &&
+            sectionTitle != "Work Experience"
+          ) {
+            currentH2 = text;
+            subSections.push({
+              subSectionTitle: text,
+              bullets: [],
+            });
+          }
+          if (
+            tagName === "h2" &&
+            (sectionTitle === "Education" || sectionTitle === "Work Experience")
+          ) {
+            currentH2 = text;
+            subSections.push({
+              subSectionTitle: text,
+              bullets: [],
+              institute: null,
+              startdate: null,
+              enddate: null,
+            });
+          } else if (tagName === "li") {
+            if (currentH2) {
+              const subSection = subSections.find(
+                (sub) => sub.subSectionTitle === currentH2
+              );
+              if (subSection) {
+                subSection.bullets.push(text);
+              }
+            } else {
+              bullets.push(text);
             }
-          } else {
-            bullets.push(text);
+          } else if (
+            (tagName === "institute" ||
+              tagName === "startdate" ||
+              tagName === "enddate") &&
+            (sectionTitle === "Education" || sectionTitle === "Work Experience")
+          ) {
+            subSections[subSections.length - 1][tagName] = text;
           }
         }
-      });
+      );
 
       const sectionObject = {
         sectionTitle,
@@ -47,6 +73,7 @@ function convertHtmlToJson(html) {
       output.push(sectionObject);
     });
 
+    console.log("-----html is ----- ", html);
     return output;
   } catch (error) {
     throw new Error();

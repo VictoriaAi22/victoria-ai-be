@@ -122,7 +122,7 @@ async function regenerateSection(req) {
         const limit = 1;
         const companyDetail = await webCrawl(
           validateURL(body?.company_url),
-          5000
+          1000
         );
 
         if (companyDetail?.error) return;
@@ -339,11 +339,14 @@ async function genarateResume(documents, job_description, section) {
 </section>
 
 
-This format should be used for Education and work Experience sections.
+This format should be used for Education and work Experience sections.institute, startdate and enddate must be included. if institute,startdate or enddate is not present use '-' as placeholder.
 
 '<section>
 <h1>Work Experience</h1>
-<h2>Full Stack Developer, SageByte, New York (2021 - 2023)</h2>
+<h2>[job title]</h2>
+<institute>[institute name]</institute>
+<startdate>[job starting date]</startdate>
+<enddate>[job end date]</enddate>
 <li>Developed user-friendly solutions using TypeScript, JavaScript, and Solidity.</li>
 <li>Worked with frameworks such as React, Next.js, Node.js, Strapi, Hardhat, and Truffle.</li>
 
