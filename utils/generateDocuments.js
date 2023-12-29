@@ -374,7 +374,7 @@ async function forResume(documents, job_description) {
   have, my specialty or area where you have the most experience, my
   soft or hard skills that are relevant to the position, any achievements 
   I've accomplished that brought in results, my Professional career goals,
-  and keywords used in the job posting. Provide 2 to 4 bullet points for
+  and keywords used in the job posting. Provide 2 to 5 bullet points for
   each job experience. Keep skills as simple bullet points. Provide
   maximum 12 skills. Each skill must not be of more then 2 words. Do not change job titles. Avoid directly mentioning
   the company's name and ensure the inclusion of relevant keywords,
