@@ -27,6 +27,9 @@ module.exports = {
           .auth(query.access_token)
           .request();
 
+        console.log("This is the response", res);
+        console.log("This is google", google);
+
         const { body } = res;
 
         return {
