@@ -28,7 +28,7 @@ module.exports = {
           .request();
 
         console.log("This is the response", res);
-        console.log("This is google", google);
+        console.log("This is google", query);
 
         const { body } = res;
 
@@ -36,9 +36,8 @@ module.exports = {
           email: body.email,
           first_name: body.given_name,
           last_name: body.family_name,
-          profile_picture: body.picture,
           provider: "google",
-          username: body.name,
+          username: body.name + Date.now(),
         };
       });
   },
