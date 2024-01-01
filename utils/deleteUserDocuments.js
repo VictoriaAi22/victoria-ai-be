@@ -1,7 +1,7 @@
 async function deleteUserDocuments(strapi) {
   try {
     const sixtyDaysAgo = new Date();
-    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 1);
+    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
     console.log("----sixtyDaysAgo-----", sixtyDaysAgo);
 
     // Find outdated entries
