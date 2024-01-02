@@ -12,43 +12,26 @@ function convertHtmlToJson(html) {
       const subSections = [];
 
       let currentH2 = null;
+      let currentSubSection = null;
 
       $("h2, li, institute, startdate, enddate", section).each(
         (subIndex, element) => {
           const tagName = $(element).prop("tagName").toLowerCase();
           const text = $(element).text().trim();
 
-          if (
-            tagName === "h2" &&
-            sectionTitle != "Education" &&
-            sectionTitle != "Work Experience"
-          ) {
+          if (tagName === "h2") {
             currentH2 = text;
-            subSections.push({
-              subSectionTitle: text,
-              bullets: [],
-            });
-          }
-          if (
-            tagName === "h2" &&
-            (sectionTitle === "Education" || sectionTitle === "Work Experience")
-          ) {
-            currentH2 = text;
-            subSections.push({
+            currentSubSection = {
               subSectionTitle: text,
               bullets: [],
               institute: null,
               startdate: null,
               enddate: null,
-            });
+            };
+            subSections.push(currentSubSection);
           } else if (tagName === "li") {
-            if (currentH2) {
-              const subSection = subSections.find(
-                (sub) => sub.subSectionTitle === currentH2
-              );
-              if (subSection) {
-                subSection.bullets.push(text);
-              }
+            if (currentSubSection) {
+              currentSubSection.bullets.push(text);
             } else {
               bullets.push(text);
             }
@@ -58,7 +41,7 @@ function convertHtmlToJson(html) {
               tagName === "enddate") &&
             (sectionTitle === "Education" || sectionTitle === "Work Experience")
           ) {
-            subSections[subSections.length - 1][tagName] = text;
+            currentSubSection[tagName] = text;
           }
         }
       );
@@ -72,8 +55,21 @@ function convertHtmlToJson(html) {
 
       output.push(sectionObject);
     });
+    output.forEach((section) => {
+      if (
+        !section.sectionTitle.toLowerCase().includes("education") &&
+        !section.sectionTitle.toLowerCase().includes("work experience") &&
+        section.subSections
+      ) {
+        section.subSections.forEach((subSection) => {
+          // Remove unwanted properties
+          delete subSection?.institute;
+          delete subSection?.startdate;
+          delete subSection?.enddate;
+        });
+      }
+    });
 
-    console.log("-----html is ----- ", html);
     return output;
   } catch (error) {
     throw new Error();

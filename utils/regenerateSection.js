@@ -328,13 +328,15 @@ async function genarateResume(documents, job_description, section) {
  BioData should be in exactly this format 
 
  <section>
-<h1>BioData</h1>
-<h2>Name</h2>
-<li>[my fullname]</li>
-<h2>Contact</h2>
-<li>[my contact number]</li>
-<h2>Email</h2>
-<li>[my email]</li>
+ <h1>BioData</h1>
+ <h2>firstname</h2>
+ <li>[my firstname]</li>
+ <h2>lastname</h2>
+ <li>[my lastname]</li>
+ <h2>Contact</h2>
+ <li>[my contact number]</li>
+ <h2>Email</h2>
+ <li>[my email]</li>
 
 </section>
 
