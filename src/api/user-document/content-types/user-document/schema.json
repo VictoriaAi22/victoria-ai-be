@@ -24,9 +24,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "html": {
       "type": "string"
@@ -34,7 +32,7 @@
     "color": {
       "type": "string",
       "required": false,
-      "default": "#0000"
+      "default": "#000000"
     },
     "template": {
       "type": "component",
