@@ -73,7 +73,8 @@
     "regenerationCount": {
       "type": "integer",
       "max": 3,
-      "min": 0
+      "min": 0,
+      "default": 3
     },
     "hasDownloaded": {
       "type": "boolean",

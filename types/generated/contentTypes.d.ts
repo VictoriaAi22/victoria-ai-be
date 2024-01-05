@@ -863,6 +863,12 @@ export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
     jobtitle: Attribute.String;
     job_description: Attribute.Text;
     document_url: Attribute.String;
+    regenerationCount: Attribute.Integer &
+      Attribute.SetMinMax<{
+        min: 0;
+        max: 3;
+      }>;
+    hasDownloaded: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
