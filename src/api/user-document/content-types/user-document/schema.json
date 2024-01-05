@@ -24,7 +24,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "html": {
       "type": "string"
@@ -67,6 +69,15 @@
     },
     "document_url": {
       "type": "string"
+    },
+    "regenerationCount": {
+      "type": "integer",
+      "max": 3,
+      "min": 0
+    },
+    "hasDownloaded": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
