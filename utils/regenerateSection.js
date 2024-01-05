@@ -285,6 +285,8 @@ async function generateCoverLetter(
  If there is any bullet then  bullet must be written inside  <li>/[bullet]</li>. '
   
   Use my details from my resume.
+
+  Don't add contact details in any section at all other then the contact section.
   `;
 
   try {
