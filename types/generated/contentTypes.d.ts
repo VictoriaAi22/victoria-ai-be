@@ -867,7 +867,8 @@ export interface ApiUserDocumentUserDocument extends Schema.CollectionType {
       Attribute.SetMinMax<{
         min: 0;
         max: 3;
-      }>;
+      }> &
+      Attribute.DefaultTo<3>;
     hasDownloaded: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
